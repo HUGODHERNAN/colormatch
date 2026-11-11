@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>ColorMatch — Juego Multijugador de Memoria de Color y Códigos HEX</title>
+    <meta name="description" content="Juega ColorMatch online gratis con amigos (multijugador sin límite de sala). Memoriza el color HEX en 5 segundos, adivina la tonalidad exacta en 20 segundos y compite en 10 rondas.">
+    <meta name="keywords" content="juego de colores, adivinar color hex, memoria visual, juego multijugador online, comparar colores hex, test de percepcion de color, colormatch">
+    <meta name="author" content="ColorMatch">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <meta name="theme-color" content="#2684FF">
+
+    <!-- Configuración PWA (Progressive Web App) para instalar como App en iOS y Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ColorMatch">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%23F7E354' stroke='%23111111' stroke-width='12'/><circle cx='54' cy='90' r='20' fill='%23FF3B30' stroke='%23111111' stroke-width='8'/><circle cx='90' cy='90' r='20' fill='%23FF9500' stroke='%23111111' stroke-width='8'/><circle cx='126' cy='90' r='20' fill='%2328CD41' stroke='%23111111' stroke-width='8'/></svg>">
+
+    <!-- Web App Manifest embebido en Data URI para mantener todo en 1 solo archivo -->
+    <link rel="manifest" id="pwa-manifest" href='data:application/manifest+json,{"name":"ColorMatch — Duelo de Colores","short_name":"ColorMatch","description":"Juego multijugador de memoria de color y códigos HEX con amigos.","start_url":"./","display":"standalone","background_color":"#2684FF","theme_color":"#2684FF","orientation":"portrait","icons":[{"src":"data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27><rect width=%27512%27 height=%27512%27 rx=%27110%27 fill=%27%23F7E354%27 stroke=%27%23111111%27 stroke-width=%2732%27/><circle cx=%27156%27 cy=%27256%27 r=%2756%27 fill=%27%23FF3B30%27 stroke=%27%23111111%27 stroke-width=%2722%27/><circle cx=%27256%27 cy=%27256%27 r=%2756%27 fill=%27%23FF9500%27 stroke=%27%23111111%27 stroke-width=%2722%27/><circle cx=%27356%27 cy=%27256%27 r=%2756%27 fill=%27%2328CD41%27 stroke=%27%23111111%27 stroke-width=%2722%27/></svg>","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}]}'>
+
+    <!-- Preconnect para acelerar carga de fuentes y mejorar Core Web Vitals (LCP) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Open Graph / WhatsApp / Discord / Facebook Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ColorMatch">
+    <meta property="og:locale" content="es_LA">
+    <meta property="og:title" content="🎨 ColorMatch — Duelo Multijugador de Memoria de Color">
+    <meta property="og:description" content="¡Entra a la sala! Memoriza el tono en 5s y compite en 10 rondas de precisión visual con todos tus amigos.">
+    <meta property="og:image" content="https://placehold.co/1200x630/2684FF/FFFFFF.png?text=ColorMatch+%E2%80%94+Duelo+de+Colores">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Pantalla de juego de ColorMatch: Duelo de Colores entre amigos">
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="🎨 ColorMatch — Duelo Multijugador de Memoria de Color">
+    <meta name="twitter:description" content="Memoriza el color en 5s, recréalo a ciegas en 20s y compite online con todos tus amigos.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/2684FF/FFFFFF.png?text=ColorMatch+%E2%80%94+Duelo+de+Colores">
+
+    <!-- Datos Estructurados JSON-LD (Schema.org VideoGame / WebApplication) para Rich Snippets en Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      "name": "ColorMatch — Duelo de Colores",
+      "description": "Juego web multijugador en tiempo real para comparar y memorizar códigos de color HEX entre amigos a lo largo de 10 rondas.",
+      "genre": ["Puzzle", "Trivia", "Educational", "Party Game"],
+      "playMode": "MultiPlayer",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Web Browser",
+      "inLanguage": "es",
+      "numberOfPlayers": {
+        "@type": "QuantitativeValue",
+        "minValue": 2
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+
+    <!-- Favicon SVG nativo estilo Homeroom -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23F7E354' stroke='%23111111' stroke-width='8'/><circle cx='32' cy='50' r='12' fill='%23FF3B30' stroke='%23111111' stroke-width='5'/><circle cx='52' cy='50' r='12' fill='%23FF9500' stroke='%23111111' stroke-width='5'/><circle cx='72' cy='50' r='12' fill='%2328CD41' stroke='%23111111' stroke-width='5'/></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Newsreader (Editorial Serif), Shrikhand (Logo Script), Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Shrikhand&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- PeerJS WebRTC P2P Library -->
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Newsreader', 'Georgia', 'serif'],
+                        logo: ['Shrikhand', 'cursive'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        hrBlue: '#2684FF',
+                        hrYellow: '#F7E354',
+                        hrYellowHover: '#F2D62B',
+                        hrGrayPill: '#E5E7EB',
+                        hrCream: '#FAF9F5',
+                        hrInk: '#111111'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #2684FF;
+            color: #111111;
+            overflow-x: hidden;
+        }
+
+        /* Tipografía Serif Editorial exacta al estilo Homeroom */
+        .editorial-heading {
+            font-family: 'Newsreader', Georgia, serif;
+            letter-spacing: -0.025em;
+            line-height: 1.06;
+        }
+
+        /* Botones Píldora y Cajas estilo Homeroom (Sin degradados, bordes negros sólidos y sombra rígida inferior) */
+        .hr-pill-yellow {
+            background-color: #F7E354;
+            color: #111111;
+            border: 1.5px solid #111111;
+            box-shadow: 0 3px 0 #111111;
+            border-radius: 9999px;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+        }
+        .hr-pill-yellow:hover:not(:disabled) {
+            background-color: #F2D62B;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 0 #111111;
+        }
+        .hr-pill-yellow:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #111111;
+        }
+
+        .hr-pill-white {
+            background-color: #FFFFFF;
+            color: #111111;
+            border: 1.5px solid #111111;
+            box-shadow: 0 3px 0 #111111;
+            border-radius: 9999px;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+        }
+        .hr-pill-white:hover:not(:disabled) {
+            background-color: #F3F4F6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 0 #111111;
+        }
+        .hr-pill-white:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #111111;
+        }
+
+        .hr-rect-yellow {
+            background-color: #F7E354;
+            color: #111111;
+            border: 1.5px solid #111111;
+            box-shadow: 0 2px 0 #111111;
+            border-radius: 6px;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .hr-rect-yellow:hover {
+            background-color: #F2D62B;
+        }
+
+        .hr-card {
+            background-color: #FFFFFF;
+            border: 2px solid #111111;
+            box-shadow: 0 4px 0 #111111;
+            border-radius: 20px;
+        }
+
+        .hr-subcard {
+            background-color: #FAF9F5;
+            border: 1.5px solid #111111;
+            border-radius: 16px;
+        }
+
+        .hr-input {
+            background-color: #FFFFFF;
+            border: 1.5px solid #111111;
+            box-shadow: inset 0 2px 0 rgba(0,0,0,0.06);
+            color: #111111;
+            transition: box-shadow 0.15s ease;
+        }
+        .hr-input:focus {
+            outline: none;
+            box-shadow: 0 3px 0 #111111;
+            background-color: #FEFCE8;
+        }
+
+        /* Burbuja flotante estilo "add a feature that..|" */
+        .hr-speech-pill {
+            background-color: #E5E7EB;
+            border: 1.5px solid #6B7280;
+            box-shadow: 0 3px 0 #111111;
+            border-radius: 9999px;
+            border-bottom-right-radius: 4px;
+        }
+
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .cursor-bar {
+            display: inline-block;
+            width: 2px;
+            height: 14px;
+            background-color: #F97316;
+            vertical-align: middle;
+            margin-left: 2px;
+            animation: blinkCursor 1s infinite;
+        }
+
+        /* Sliders limpios con bordes sólidos sin degradados decorativos */
+        input[type="range"].color-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 14px;
+            border-radius: 999px;
+            border: 1.5px solid #111111;
+            background-color: #E5E7EB;
+            outline: none;
+            cursor: pointer;
+        }
+        input[type="range"].color-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #F7E354;
+            border: 2px solid #111111;
+            box-shadow: 0 2px 0 #111111;
+            cursor: grab;
+            transition: transform 0.1s ease;
+        }
+        input[type="range"].color-slider::-webkit-slider-thumb:active {
+            cursor: grabbing;
+            transform: scale(1.12);
+        }
+
+        /* Bandas de matiz discretas para orientar el selector sin degradados suaves */
+        .hue-steps {
+            background: repeating-linear-gradient(
+                to right,
+                #FF3B30 0%, #FF3B30 16.6%,
+                #FFCC00 16.6%, #FFCC00 33.3%,
+                #28CD41 33.3%, #28CD41 50%,
+                #00C7BE 50%, #00C7BE 66.6%,
+                #2684FF 66.6%, #2684FF 83.3%,
+                #AF52DE 83.3%, #AF52DE 100%
+            );
+        }
+
+        @keyframes popIn {
+            0% { transform: translateY(6px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .animate-pop {
+            animation: popIn 0.22s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-3 sm:p-6 md:p-9 flex flex-col items-center selection:bg-hrYellow selection:text-black">
+
+    <!-- Notificación Toast Flotante Estilo Homeroom -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden transform transition-all duration-200 translate-y-2 opacity-0">
+        <div class="bg-white text-hrInk px-5 py-3.5 rounded-full border-2 border-hrInk shadow-[0_4px_0_#111111] flex items-center gap-3 font-semibold text-sm">
+            <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+            <span id="toast-msg">Notificación</span>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         BARRA DE NAVEGACIÓN ESTILO VENTANA HOMEROOM
+    =========================================== -->
+    <header class="w-full max-w-6xl bg-white border-2 border-hrInk px-3.5 sm:px-6 py-3 sm:py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 mb-4 sm:mb-5">
+        <!-- Fila Superior (Móvil) / Izquierda y Centro (Desktop): Puntos de ventana + Título de la página -->
+        <div class="w-full md:w-auto flex items-center justify-between md:justify-start gap-3 sm:gap-5 relative">
+            <div class="flex items-center gap-2 z-10">
+                <span class="w-3.5 h-3.5 rounded-full bg-[#FF3B30] border-[1.5px] border-hrInk inline-block"></span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#FF9500] border-[1.5px] border-hrInk inline-block"></span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#28CD41] border-[1.5px] border-hrInk inline-block"></span>
+
+                <!-- Indicador de Red P2P WebRTC -->
+                <div id="header-p2p-status" class="hidden items-center gap-1.5 bg-[#FAF9F5] border border-hrInk px-2 py-0.5 rounded-full text-[11px] font-bold text-hrInk ml-1">
+                    <span id="p2p-dot" class="w-2 h-2 rounded-full bg-[#28CD41] border border-hrInk"></span>
+                    <span id="p2p-status-text" class="hidden lg:inline">P2P Activo</span>
+                </div>
+            </div>
+
+            <!-- Centro en móvil / Título principal -->
+            <div class="flex items-center justify-center md:static">
+                <span class="font-logo text-2xl sm:text-3xl tracking-tight text-hrInk select-none">
+                    ColorMatch
+                </span>
+            </div>
+
+            <!-- Espaciador invisible en móvil para mantener el título centrado -->
+            <div class="w-12 md:hidden"></div>
+        </div>
+
+        <!-- Fila Inferior (Móvil) / Derecha (Desktop): Sala, Usuario y Salir -->
+        <div id="header-controls-row" class="hidden w-full md:w-auto pt-2.5 md:pt-0 border-t-[1.5px] md:border-t-0 border-neutral-200 flex-wrap items-center justify-center md:justify-end gap-2 sm:gap-3 text-xs sm:text-sm font-medium text-hrInk">
+            <span id="header-rules-summary" class="hidden xl:inline text-neutral-600">5s Ver · 20s Buscar · 10 Rondas</span>
+
+            <!-- Badge de Sala cuando está dentro de una -->
+            <div id="header-room-badge" class="hidden items-center gap-1.5 bg-[#FAF9F5] border-[1.5px] border-hrInk px-2.5 py-1 rounded-md text-xs font-mono">
+                <span class="text-neutral-500">SALA:</span>
+                <strong id="header-room-code" class="text-hrInk font-extrabold tracking-wider">----</strong>
+                <button onclick="window.copyRoomCode()" class="text-neutral-600 hover:text-black ml-1" title="Copiar código">
+                    <i class="fa-regular fa-copy"></i>
+                </button>
+            </div>
+
+            <!-- Badge del Jugador estilo botón Waitlist amarillo -->
+            <div id="header-user-badge" class="hidden items-center gap-1.5 hr-rect-yellow px-2.5 py-1 text-xs font-bold">
+                <i class="fa-solid fa-user text-[10px]"></i>
+                <span id="header-username" class="truncate max-w-[110px]">Jugador</span>
+            </div>
+
+            <!-- Botón Salir de la Sala -->
+            <button id="btn-leave-room" onclick="window.leaveRoom()" class="hidden px-2.5 py-1 rounded-md text-xs font-bold bg-[#FF3B30] text-white border-[1.5px] border-hrInk shadow-[0_2px_0_#111111] hover:opacity-90 transition items-center gap-1.5" title="Salir al menú">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Salir</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         LIENZO BLANCO PRINCIPAL (ESTILO HOMEROOM)
+    =========================================== -->
+    <main class="w-full max-w-6xl bg-white border-2 border-hrInk flex-grow flex flex-col justify-center px-3.5 sm:px-10 py-6 sm:py-12 relative overflow-hidden">
+        <!-- Indicador de Conexión Inicial -->
+        <div id="view-loading" class="hidden text-center py-20 space-y-4">
+            <div class="w-14 h-14 rounded-full bg-hrYellow border-2 border-hrInk shadow-[0_3px_0_#111111] flex items-center justify-center mx-auto text-hrInk text-2xl animate-spin">
+                <i class="fa-solid fa-circle-notch"></i>
+            </div>
+            <p id="loading-status-msg" class="text-neutral-600 font-medium text-sm">Iniciando motor WebRTC P2P...</p>
+        </div>
+
+        <!-- ==========================================
+             VISTA 1: REGISTRO DE NOMBRE DE USUARIO (HERO HOMEROOM)
+        =========================================== -->
+        <section id="view-register" class="max-w-2xl w-full mx-auto animate-pop text-center relative">
+            
+            <!-- Píldora flotante decorativa estilo "add a feature that..|" -->
+            <div class="hidden md:inline-flex items-center hr-speech-pill px-4 py-2 text-xs font-medium text-neutral-800 mb-6">
+                <span>memoriza el color en 5s..</span><span class="cursor-bar"></span>
+            </div>
+
+            <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500 mb-3">
+                MULTIJUGADOR EN TIEMPO REAL · SALAS SIN LÍMITE
+            </p>
+
+            <h1 class="editorial-heading text-4xl sm:text-6xl md:text-7xl font-semibold text-hrInk mb-6">
+                Duelo de colores<br>entre amigos.
+            </h1>
+
+            <p class="text-sm sm:text-lg text-neutral-600 max-w-xl mx-auto leading-relaxed mb-8">
+                ¿Quién tiene mejor memoria visual en tu grupo? Observa el color de referencia durante <strong>5 segundos</strong>, recréalo a ciegas en <strong>20 segundos</strong> y suma puntos a lo largo de <strong>5 a 15 rondas</strong>.
+            </p>
+
+            <!-- Aviso si viene con link de invitación -->
+            <div id="invite-banner" class="hidden max-w-md mx-auto mb-6 bg-hrYellow border-2 border-hrInk shadow-[0_3px_0_#111111] rounded-full px-5 py-2.5 text-center">
+                <p class="text-xs text-hrInk font-bold">
+                    <i class="fa-solid fa-envelope-open-text mr-1"></i> Invitación activa para la sala <strong id="invite-code-label" class="font-mono underline"></strong>
+                </p>
+            </div>
+
+            <!-- Formulario limpio centrado con botones píldora estilo Homeroom -->
+            <div class="max-w-md mx-auto space-y-4">
+                <div class="text-left">
+                    <label for="input-nickname" class="block text-[11px] font-bold uppercase tracking-wider text-neutral-600 mb-1.5 ml-3">
+                        Registra tu nombre para entrar
+                    </label>
+                    <input 
+                        type="text" 
+                        id="input-nickname" 
+                        maxlength="16" 
+                        placeholder="Escribe tu nombre o apodo..."
+                        onkeydown="if(event.key === 'Enter') window.submitNickname()"
+                        class="w-full px-6 py-4 rounded-full hr-input font-bold text-base text-center"
+                    >
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                    <button onclick="window.submitNickname()" class="w-full sm:w-auto px-9 py-4 hr-pill-yellow font-bold text-sm sm:text-base flex items-center justify-center gap-2">
+                        <span>Entrar al Lobby</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                    <!-- Botón para Instalar como App en Celular / PC (PWA) -->
+                    <button id="btn-install-pwa" onclick="window.installPWAApp()" class="w-full sm:w-auto px-6 py-4 hr-pill-white font-bold text-sm sm:text-base flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                        <span>Instalar en Celular</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal de Instrucciones de Instalación para iOS / Navegadores móviles -->
+            <div id="pwa-install-modal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+                <div class="hr-card max-w-md w-full p-6 text-left space-y-4 animate-pop">
+                    <div class="flex items-center justify-between border-b-2 border-hrInk pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-full bg-hrYellow border border-hrInk flex items-center justify-center font-bold text-sm">
+                                <i class="fa-solid fa-download"></i>
+                            </span>
+                            <h3 class="editorial-heading text-2xl font-semibold text-hrInk">Instalar ColorMatch</h3>
+                        </div>
+                        <button onclick="window.closeInstallModal()" class="w-8 h-8 rounded-full hr-pill-white flex items-center justify-center text-xs font-bold">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-neutral-700 leading-relaxed">
+                        Puedes agregar <strong>ColorMatch</strong> a la pantalla de inicio de tu celular para abrirlo en <strong>pantalla completa como una App</strong> sin barras del navegador:
+                    </p>
+
+                    <div class="space-y-2.5 text-xs">
+                        <div class="hr-subcard p-3.5 space-y-1">
+                            <div class="font-bold text-hrInk flex items-center gap-1.5">
+                                <i class="fa-brands fa-android text-[#28CD41] text-base"></i>
+                                <span>En Android (Chrome / Edge / Brave):</span>
+                            </div>
+                            <p class="text-neutral-600">Toca el menú de <strong>3 puntos (⋮)</strong> arriba a la derecha y selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a la pantalla principal"</strong>.</p>
+                        </div>
+
+                        <div class="hr-subcard p-3.5 space-y-1">
+                            <div class="font-bold text-hrInk flex items-center gap-1.5">
+                                <i class="fa-brands fa-apple text-hrInk text-base"></i>
+                                <span>En iPhone / iPad (Safari):</span>
+                            </div>
+                            <p class="text-neutral-600">Toca el botón inferior de <strong>Compartir</strong> (<i class="fa-solid fa-arrow-up-from-bracket"></i>) y elige <strong>"Agregar a inicio"</strong>.</p>
+                        </div>
+                    </div>
+
+                    <button onclick="window.closeInstallModal()" class="w-full py-3 hr-pill-yellow font-bold text-xs sm:text-sm">
+                        ¡Entendido!
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tarjetas inferiores de reglas sin degradados -->
+            <div class="mt-12 pt-8 border-t-2 border-neutral-200 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto text-xs font-semibold text-hrInk">
+                <div class="hr-subcard p-3.5 flex items-center justify-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-[#FF3B30] border border-hrInk"></span>
+                    <span>2+ Jugadores (Sin límite)</span>
+                </div>
+                <div class="hr-subcard p-3.5 flex items-center justify-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-[#FF9500] border border-hrInk"></span>
+                    <span>5s Ver / 20s Buscar</span>
+                </div>
+                <div class="hr-subcard p-3.5 flex items-center justify-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-[#28CD41] border border-hrInk"></span>
+                    <span>5, 7, 10, 12 o 15 Rondas</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contenido Semántico para Motores de Búsqueda y Usuarios sin JS -->
+        <noscript>
+            <div class="max-w-xl mx-auto mt-6 p-4 border-2 border-black bg-[#FAF9F5] text-center text-xs">
+                Para jugar a ColorMatch (Duelo Multijugador de Memoria de Color) necesitas tener JavaScript activado en tu navegador.
+            </div>
+        </noscript>
+
+        <!-- ==========================================
+             VISTA 2: MENÚ CREAR SALA O UNIRSE A SALA
+        =========================================== -->
+        <section id="view-menu" class="hidden max-w-3xl w-full mx-auto animate-pop space-y-8">
+            <div class="text-center space-y-2">
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500"> SELECCIONA MODO DE SALA </p>
+                <h2 class="editorial-heading text-4xl sm:text-5xl font-semibold text-hrInk">
+                    Hola, <span id="menu-greeting-name" class="underline decoration-hrYellow decoration-4">Jugador</span>.
+                </h2>
+                <p class="text-sm sm:text-base text-neutral-600">Crea una sala nueva para ser el Líder o escribe el código de tus amigos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Tarjeta: Crear Sala -->
+                <div class="hr-card p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-full bg-hrYellow border-2 border-hrInk shadow-[0_2px_0_#111111] flex items-center justify-center text-hrInk text-lg">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                        <h3 class="editorial-heading text-3xl font-semibold text-hrInk">Crear nueva sala</h3>
+                        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                            Serás el <strong>Líder de la sala</strong>. Obtendrás un código de 5 letras y un link directo para invitar a todos los amigos que quieras.
+                        </p>
+                    </div>
+
+                    <button onclick="window.createRoom()" id="btn-create-room" class="w-full py-4 hr-pill-yellow font-bold text-sm sm:text-base flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Crear Sala como Líder</span>
+                    </button>
+                </div>
+
+                <!-- Tarjeta: Unirse a Sala -->
+                <div class="hr-card p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-full bg-hrBlue border-2 border-hrInk shadow-[0_2px_0_#111111] flex items-center justify-center text-white text-lg">
+                            <i class="fa-solid fa-door-open"></i>
+                        </div>
+                        <h3 class="editorial-heading text-3xl font-semibold text-hrInk">Unirse a una sala</h3>
+                        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                            Ingresa el código de 5 letras que te envió el líder para entrar a la sala de espera.
+                        </p>
+
+                        <div class="pt-1">
+                            <input 
+                                type="text" 
+                                id="input-join-code" 
+                                maxlength="6" 
+                                placeholder="CÓDIGO (EJ: K7X9P)"
+                                onkeydown="if(event.key === 'Enter') window.joinRoomByInput()"
+                                class="w-full px-4 py-3.5 rounded-full hr-input font-mono font-extrabold text-center text-lg uppercase tracking-widest"
+                            >
+                        </div>
+                    </div>
+
+                    <button onclick="window.joinRoomByInput()" id="btn-join-room" class="w-full py-4 hr-pill-white font-bold text-sm sm:text-base flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Entrar a la Sala</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button onclick="window.changeNickname()" class="text-xs font-semibold text-neutral-500 hover:text-black underline">
+                    Cambiar mi nombre de usuario
+                </button>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             VISTA 3: SALA DE ESPERA (LOBBY)
+        =========================================== -->
+        <section id="view-lobby" class="hidden max-w-4xl w-full mx-auto animate-pop space-y-6">
+            <div class="hr-card p-6 sm:p-8 space-y-6">
+                <!-- Cabecera del Lobby -->
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-6 pb-6 border-b-2 border-hrInk">
+                    <div class="text-center lg:text-left space-y-1.5">
+                        <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-hrYellow border border-hrInk">
+                            <span class="w-2 h-2 rounded-full bg-[#28CD41] border border-hrInk"></span>
+                            SALA DE ESPERA (LOBBY)
+                        </span>
+                        <h2 class="editorial-heading text-3xl sm:text-5xl font-semibold text-hrInk pt-1">Esperando al grupo.</h2>
+                        <p class="text-xs sm:text-sm text-neutral-600">Sin límite de jugadores. Comparte el código o el link directo para que se sumen:</p>
+                    </div>
+
+                    <!-- Caja del Código Grande y Botones Píldora -->
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <div class="bg-[#FAF9F5] border-2 border-hrInk shadow-[0_3px_0_#111111] rounded-2xl px-6 py-3 text-center">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-neutral-500">Código de Sala</span>
+                            <span id="lobby-room-code" class="font-mono font-black text-2xl sm:text-3xl tracking-widest text-hrInk">-----</span>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <div class="flex gap-2">
+                                <button onclick="window.copyRoomCode()" class="px-4 py-2 hr-pill-white text-xs font-bold flex items-center justify-center gap-1.5">
+                                    <i class="fa-regular fa-copy"></i> Código
+                                </button>
+                                <button onclick="window.copyInviteLink()" class="px-4 py-2 hr-pill-yellow text-xs font-bold flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-link"></i> Link Directo
+                                </button>
+                            </div>
+                            <button onclick="window.shareOnWhatsApp()" class="px-4 py-2 rounded-full text-xs font-bold bg-[#28CD41] text-hrInk border-[1.5px] border-hrInk shadow-[0_3px_0_#111111] hover:opacity-95 transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> Invitar por WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Jugadores Conectados (Dinámica sin límite fijo) -->
+                <div class="space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-neutral-600 flex items-center gap-2">
+                            <i class="fa-solid fa-users text-hrInk"></i>
+                            Jugadores en la Sala (<span id="lobby-player-count">1</span> conectados)
+                        </h3>
+
+                        <!-- Explicación dinámica de la regla de puntos según cantidad actual -->
+                        <div id="lobby-scoring-rule-badge" class="text-xs font-bold px-3.5 py-1 rounded-full bg-[#FAF9F5] text-hrInk border border-hrInk">
+                            Regla: Con 2-3 jugadores, solo el 1° lugar suma +1 pto.
+                        </div>
+                    </div>
+
+                    <!-- Grid dinámico que crece conforme entran jugadores -->
+                    <div id="lobby-players-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
+                        <!-- Llenado dinámicamente por JS según la cantidad de jugadores -->
+                    </div>
+                </div>
+
+                <!-- Panel de Configuración del Líder (Host) o Mensaje de Espera -->
+                <div class="pt-6 border-t-2 border-hrInk">
+                    <!-- Controles exclusivos del Líder -->
+                    <div id="host-lobby-controls" class="hidden space-y-5">
+                        <div class="hr-subcard p-4 space-y-4">
+                            <!-- Selector de Número de Rondas (5, 7, 10, 12, 15) -->
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-neutral-300">
+                                <div class="text-xs font-bold text-hrInk flex items-center gap-2">
+                                    <i class="fa-solid fa-flag-checkered"></i>
+                                    <span>Cantidad de Rondas de la Partida:</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-1.5" id="round-selector-group">
+                                    <button type="button" onclick="window.setTotalRoundsByHost(5)" data-rounds="5" class="round-opt-btn px-3.5 py-1.5 hr-pill-white text-xs font-bold">5</button>
+                                    <button type="button" onclick="window.setTotalRoundsByHost(7)" data-rounds="7" class="round-opt-btn px-3.5 py-1.5 hr-pill-white text-xs font-bold">7</button>
+                                    <button type="button" onclick="window.setTotalRoundsByHost(10)" data-rounds="10" class="round-opt-btn px-3.5 py-1.5 hr-pill-yellow text-xs font-black">10</button>
+                                    <button type="button" onclick="window.setTotalRoundsByHost(12)" data-rounds="12" class="round-opt-btn px-3.5 py-1.5 hr-pill-white text-xs font-bold">12</button>
+                                    <button type="button" onclick="window.setTotalRoundsByHost(15)" data-rounds="15" class="round-opt-btn px-3.5 py-1.5 hr-pill-white text-xs font-bold">15</button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div class="text-xs font-bold text-hrInk flex items-center gap-2">
+                                    <i class="fa-solid fa-sliders"></i>
+                                    Configuración de Colores de las Rondas (Opcional)
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="window.addBotPlayer()" id="btn-add-bot" class="px-3.5 py-1.5 hr-pill-white text-xs font-bold">
+                                        <i class="fa-solid fa-robot mr-1"></i> + Añadir Bot IA
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-xs text-neutral-600">
+                                Por defecto se sortean <strong>colores HEX sorpresa</strong> para cada ronda. Si deseas fijar códigos HEX para las primeras rondas, escríbelos separados por coma (ej: <code class="font-mono font-bold text-hrInk">#FF5733, #2EC4B6, #9B5DE5</code>):
+                            </p>
+                            <input 
+                                type="text" 
+                                id="host-custom-colors" 
+                                placeholder="Dejar vacío para colores aleatorios..."
+                                class="w-full px-4 py-2.5 rounded-full hr-input text-xs font-mono"
+                            >
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <p class="text-xs text-neutral-600 font-medium">
+                                <i class="fa-solid fa-circle-info mr-1"></i>
+                                Eres el <strong>Líder</strong>. Cuando todos estén listos, manda la partida.
+                            </p>
+                            <button onclick="window.startGameByHost()" id="btn-start-game" class="w-full sm:w-auto px-9 py-4 hr-pill-yellow font-black text-base flex items-center justify-center gap-2.5">
+                                <i class="fa-solid fa-play"></i>
+                                <span id="btn-start-game-label">¡Iniciar Partida (10 Rondas)!</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje para jugadores no líderes -->
+                    <div id="guest-lobby-wait" class="hidden text-center py-4">
+                        <div class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#FAF9F5] border-[1.5px] border-hrInk text-hrInk text-sm font-semibold">
+                            <i class="fa-solid fa-spinner animate-spin"></i>
+                            <span>Esperando a que el Líder (<strong id="lobby-host-name">Host</strong>) inicie las <strong id="guest-lobby-rounds-count">10</strong> rondas...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             VISTA 4: FASE 1 - MEMORIZACIÓN (5 SEGUNDOS)
+        =========================================== -->
+        <section id="view-memorize" class="hidden w-full max-w-3xl mx-auto animate-pop space-y-6 text-center">
+            <!-- Indicador de Ronda -->
+            <div class="flex items-center justify-between bg-[#FAF9F5] border-2 border-hrInk px-5 py-3 rounded-full shadow-[0_3px_0_#111111]">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-hrInk">
+                    Ronda <span id="mem-round-num">1</span> de <span id="mem-total-rounds">10</span>
+                </span>
+                <span class="text-xs font-bold bg-hrYellow px-3 py-0.5 rounded-full border border-hrInk">
+                    <i class="fa-solid fa-eye mr-1"></i> ¡MEMORIZA ESTE COLOR!
+                </span>
+                <span class="font-mono font-extrabold text-sm text-hrInk" id="mem-timer-text">5.0s</span>
+            </div>
+
+            <!-- Tarjeta Gigante con el Color Objetivo (Sin mostrar el código HEX) -->
+            <div class="hr-card p-6 sm:p-8 space-y-6">
+                <div class="space-y-1">
+                    <h2 class="editorial-heading text-3xl sm:text-5xl font-semibold text-hrInk">Retén el tono exacto en tu mente.</h2>
+                    <p class="text-xs sm:text-sm text-neutral-600">Solo tienes 5 segundos antes de que desaparezca</p>
+                </div>
+
+                <!-- Muestra del Color -->
+                <div id="memorize-color-box" class="w-full h-64 sm:h-80 rounded-2xl border-2 border-hrInk shadow-[0_4px_0_#111111] transition-colors duration-150 flex flex-col items-center justify-center relative overflow-hidden" style="background-color: #FF5733;">
+                    <div class="bg-white px-7 py-4 rounded-2xl border-2 border-hrInk text-hrInk shadow-[0_4px_0_#111111]">
+                        <span class="block text-[10px] uppercase tracking-widest font-bold text-neutral-500">Desaparece en</span>
+                        <span id="mem-big-countdown" class="font-mono font-black text-4xl sm:text-5xl">5.0</span>
+                    </div>
+                </div>
+
+                <!-- Barra de progreso de 5 segundos (Sólida, sin degradados) -->
+                <div class="w-full h-4 bg-[#FAF9F5] rounded-full overflow-hidden border-[1.5px] border-hrInk">
+                    <div id="mem-progress-bar" class="h-full bg-hrBlue transition-all duration-75" style="width: 100%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             VISTA 5: FASE 2 - BÚSQUEDA DEL COLOR (20 SEGUNDOS)
+        =========================================== -->
+        <section id="view-guess" class="hidden w-full max-w-3xl mx-auto animate-pop space-y-5">
+            <!-- Cabecera con Temporizador de 20s -->
+            <div class="hr-card p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="px-3.5 py-1 rounded-full bg-hrYellow border border-hrInk text-hrInk font-extrabold text-xs uppercase">
+                        Ronda <span id="guess-round-num">1</span> / <span id="guess-total-rounds">10</span>
+                    </span>
+                    <div>
+                        <h3 class="editorial-heading text-2xl font-semibold text-hrInk">Reconstruye el color que viste.</h3>
+                    </div>
+                </div>
+
+                <!-- Reloj de 20 segundos -->
+                <div class="flex items-center gap-2.5 bg-[#FAF9F5] border-[1.5px] border-hrInk px-4 py-1.5 rounded-full">
+                    <i class="fa-solid fa-stopwatch text-[#FF3B30] text-base"></i>
+                    <span id="guess-timer-display" class="font-mono font-black text-xl text-hrInk">20.0s</span>
+                </div>
+            </div>
+
+            <!-- Barra de tiempo de 20s sólida -->
+            <div class="w-full h-3.5 bg-[#FAF9F5] rounded-full overflow-hidden border-[1.5px] border-hrInk">
+                <div id="guess-progress-bar" class="h-full bg-hrYellow transition-all duration-75" style="width: 100%;"></div>
+            </div>
+
+            <!-- Panel Principal de Selección del Jugador -->
+            <div class="hr-card p-5 sm:p-7 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    
+                    <!-- Muestra del Color que el jugador está armando -->
+                    <div class="md:col-span-5 flex flex-col items-center space-y-3">
+                        <div id="player-current-swatch" class="w-full h-48 sm:h-56 rounded-2xl border-2 border-hrInk shadow-[0_4px_0_#111111] flex items-end justify-center p-3 transition-colors duration-75" style="background-color: #808080;">
+                            <span id="player-current-hex-badge" class="px-3.5 py-1 rounded-full font-mono font-bold text-xs bg-white text-hrInk border-[1.5px] border-hrInk shadow-[0_2px_0_#111111]">
+                                #808080
+                            </span>
+                        </div>
+
+                        <!-- Input directo de código HEX o Color Picker nativo -->
+                        <div class="w-full flex items-center gap-2">
+                            <div class="relative flex-grow">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 font-mono font-bold">#</span>
+                                <input 
+                                    type="text" 
+                                    id="guess-hex-input" 
+                                    value="808080" 
+                                    maxlength="7"
+                                    oninput="window.onGuessHexTyped(this.value)"
+                                    class="w-full pl-8 pr-3 py-2.5 rounded-full hr-input font-mono font-bold text-sm uppercase"
+                                >
+                            </div>
+                            <input 
+                                type="color" 
+                                id="guess-native-picker" 
+                                value="#808080"
+                                oninput="window.onGuessNativePicker(this.value)"
+                                class="w-11 h-11 rounded-full bg-white border-[1.5px] border-hrInk cursor-pointer p-1"
+                                title="Abrir selector visual"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Controles Deslizantes: Matiz (Hue), Saturación, Luminosidad y RGB -->
+                    <div class="md:col-span-7 space-y-4">
+                        <!-- Sliders HSL intuitivos -->
+                        <div class="hr-subcard p-4 space-y-3">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-600 block">1. Selector de Tonalidad (HSL)</span>
+                            
+                            <!-- Matiz / Hue -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold text-hrInk">
+                                    <span>Tono / Color (Hue)</span>
+                                    <span id="lbl-hue" class="font-mono">0°</span>
+                                </div>
+                                <input type="range" id="slider-h" min="0" max="360" value="0" oninput="window.onHslSliderChange()" class="w-full color-slider hue-steps">
+                            </div>
+
+                            <!-- Saturación -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold text-hrInk">
+                                    <span>Intensidad (Saturación)</span>
+                                    <span id="lbl-sat" class="font-mono">70%</span>
+                                </div>
+                                <input type="range" id="slider-s" min="0" max="100" value="70" oninput="window.onHslSliderChange()" class="w-full color-slider">
+                            </div>
+
+                            <!-- Luminosidad -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold text-hrInk">
+                                    <span>Brillo (Luminosidad)</span>
+                                    <span id="lbl-light" class="font-mono">50%</span>
+                                </div>
+                                <input type="range" id="slider-l" min="0" max="100" value="50" oninput="window.onHslSliderChange()" class="w-full color-slider">
+                            </div>
+                        </div>
+
+                        <!-- Sliders Finos RGB -->
+                        <div class="hr-subcard p-4 space-y-2.5">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-600 block">2. Ajuste Fino por Canales (RGB)</span>
+
+                            <div class="flex items-center gap-3 text-xs font-mono font-bold">
+                                <span class="w-5 text-[#FF3B30]">R</span>
+                                <input type="range" id="slider-r" min="0" max="255" value="128" oninput="window.onRgbSliderChange()" class="w-full color-slider">
+                                <span id="lbl-r" class="w-8 text-right text-hrInk">128</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs font-mono font-bold">
+                                <span class="w-5 text-[#28CD41]">G</span>
+                                <input type="range" id="slider-g" min="0" max="255" value="128" oninput="window.onRgbSliderChange()" class="w-full color-slider">
+                                <span id="lbl-g" class="w-8 text-right text-hrInk">128</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs font-mono font-bold">
+                                <span class="w-5 text-[#2684FF]">B</span>
+                                <input type="range" id="slider-b" min="0" max="255" value="128" oninput="window.onRgbSliderChange()" class="w-full color-slider">
+                                <span id="lbl-b" class="w-8 text-right text-hrInk">128</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón Confirmar Color y Estado de los demás jugadores -->
+                <div class="pt-4 border-t-2 border-hrInk flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-xs font-semibold text-neutral-600 flex items-center gap-2">
+                        <i class="fa-solid fa-users-viewfinder text-hrInk"></i>
+                        <span>Jugadores listos: <strong id="guess-ready-count" class="text-hrInk">0/2</strong></span>
+                    </div>
+
+                    <button onclick="window.lockInColorGuess()" id="btn-submit-guess" class="w-full sm:w-auto px-8 py-4 hr-pill-yellow font-black text-base flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>¡Confirmar y Enviar Tono!</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             VISTA 6: RESULTADOS DE LA RONDA
+        =========================================== -->
+        <section id="view-round-results" class="hidden w-full max-w-4xl mx-auto animate-pop space-y-6">
+            <div class="hr-card p-6 sm:p-8 space-y-6">
+                
+                <!-- Cabecera de Resultados de la Ronda -->
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-5 border-b-2 border-hrInk">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-3.5 py-1 rounded-full text-xs font-extrabold bg-hrYellow border border-hrInk text-hrInk">
+                                Resultados Ronda <span id="res-round-num">1</span> de <span id="res-total-rounds">10</span>
+                            </span>
+                            <span id="res-scoring-rule-note" class="text-xs font-bold text-neutral-600">
+                                (1° +1 pto · 2° +0.5 pts)
+                            </span>
+                        </div>
+                        <h2 id="res-headline" class="editorial-heading text-3xl sm:text-4xl font-semibold text-hrInk mt-2">Comparación de Similitud</h2>
+                    </div>
+
+                    <!-- Muestra del Color Objetivo Real revelada -->
+                    <div class="flex items-center gap-3 bg-[#FAF9F5] border-2 border-hrInk shadow-[0_3px_0_#111111] p-2.5 rounded-2xl">
+                        <div id="res-target-swatch" class="w-12 h-12 rounded-xl border-[1.5px] border-hrInk" style="background-color: #FF5733;"></div>
+                        <div class="pr-2">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-500">Color Buscado</span>
+                            <span id="res-target-hex" class="font-mono font-black text-base text-hrInk">#FF5733</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de todos los participantes ordenados por % de similitud -->
+                <div id="res-players-list" class="space-y-3.5">
+                    <!-- Llenado dinámicamente -->
+                </div>
+
+                <!-- Pie con Marcador Acumulado y Botón del Líder para Siguiente Ronda -->
+                <div class="pt-5 border-t-2 border-hrInk flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-xs font-semibold text-neutral-600">
+                        <i class="fa-solid fa-trophy text-hrInk mr-1"></i>
+                        Puntos sumados automáticamente al marcador general.
+                    </div>
+
+                    <div id="host-next-round-controls" class="hidden w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                        <div id="next-round-custom-hex-wrap" class="relative">
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 font-mono text-xs font-bold">#</span>
+                            <input 
+                                type="text" 
+                                id="next-round-custom-hex" 
+                                maxlength="7" 
+                                placeholder="HEX próx. ronda (opc)"
+                                class="w-full sm:w-48 pl-7 pr-3 py-3.5 rounded-full hr-input text-xs font-mono"
+                            >
+                        </div>
+                        <button onclick="window.nextRoundByHost()" id="btn-next-round" class="w-full sm:w-auto px-8 py-4 hr-pill-yellow font-black text-sm sm:text-base flex items-center justify-center gap-2">
+                            <span id="btn-next-round-text">Siguiente Ronda</span>
+                            <i class="fa-solid fa-forward-step"></i>
+                        </button>
+                    </div>
+
+                    <div id="guest-next-round-wait" class="hidden text-xs font-bold text-neutral-600 flex items-center gap-2">
+                        <i class="fa-solid fa-spinner animate-spin text-hrInk"></i>
+                        <span>Esperando a que el Líder pase a la siguiente ronda...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             VISTA 7: PODIO FINAL (FIN DE LAS RONDAS)
+        =========================================== -->
+        <section id="view-game-over" class="hidden w-full max-w-4xl mx-auto animate-pop space-y-6">
+            <div class="hr-card p-6 sm:p-10 space-y-8 text-center">
+                <div class="space-y-2">
+                    <div class="w-16 h-16 rounded-full bg-hrYellow border-2 border-hrInk shadow-[0_3px_0_#111111] text-hrInk text-2xl flex items-center justify-center mx-auto">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <span id="final-completed-badge" class="text-xs font-black uppercase tracking-widest text-neutral-500 block pt-2">¡Partida de 10 Rondas Completada!</span>
+                    <h2 id="final-winner-title" class="editorial-heading text-4xl sm:text-5xl font-semibold text-hrInk">¡Ganador de la Sala!</h2>
+                    <p class="text-sm text-neutral-600">Tabla final de posiciones y promedio de exactitud visual</p>
+                </div>
+
+                <!-- Tabla del Podio Final -->
+                <div id="final-standings-list" class="space-y-3 text-left max-w-2xl mx-auto">
+                    <!-- Llenado por JS -->
+                </div>
+
+                <!-- Acciones Finales -->
+                <div class="pt-6 border-t-2 border-hrInk flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="window.copyFinalSummary()" class="w-full sm:w-auto px-7 py-4 hr-pill-white font-bold text-sm flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>Copiar Resultados para Amigos</span>
+                    </button>
+
+                    <button id="btn-host-rematch" onclick="window.returnToLobbyByHost()" class="hidden w-full sm:w-auto px-8 py-4 hr-pill-yellow font-black text-base items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Volver al Lobby (Jugar otra vez)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Lógica Multijugador en Tiempo Real con PeerJS (WebRTC P2P) + Fallback Seguro para Sandbox -->
+    <script>
+        // ==========================================
+        // PROTECCIÓN CONTRA SECURITY_ERROR DE WEBSOCKET EN SANDBOX (CANVAS)
+        // ==========================================
+        const NativeWebSocket = window.WebSocket;
+        let isWebSocketBlockedBySandbox = false;
+
+        window.WebSocket = function (url, protocols) {
+            try {
+                return protocols ? new NativeWebSocket(url, protocols) : new NativeWebSocket(url);
+            } catch (err) {
+                isWebSocketBlockedBySandbox = true;
+                const dummyWs = new EventTarget();
+                dummyWs.url = url;
+                dummyWs.readyState = 3; // CLOSED
+                dummyWs.send = function () {};
+                dummyWs.close = function () {};
+                setTimeout(() => {
+                    const errEvt = new Event('error');
+                    const closeEvt = new Event('close');
+                    if (typeof dummyWs.onerror === 'function') dummyWs.onerror(errEvt);
+                    if (typeof dummyWs.onclose === 'function') dummyWs.onclose(closeEvt);
+                    dummyWs.dispatchEvent(errEvt);
+                    dummyWs.dispatchEvent(closeEvt);
+                }, 15);
+                return dummyWs;
+            }
+        };
+        window.WebSocket.CONNECTING = 0;
+        window.WebSocket.OPEN = 1;
+        window.WebSocket.CLOSING = 2;
+        window.WebSocket.CLOSED = 3;
+        window.WebSocket.prototype = NativeWebSocket.prototype;
+
+        // ==========================================
+        // CONFIGURACIÓN DE RED P2P (PEERJS + GOOGLE STUN) Y CANAL LOCAL
+        // ==========================================
+        const ROOM_PREFIX = 'colormatch-pe-room-';
+        const LOCAL_STORAGE_PREFIX = 'colormatch_sandbox_room_';
+        const PEER_CONFIG = {
+            debug: 0,
+            config: {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' },
+                    { urls: 'stun:stun3.l.google.com:19302' }
+                ]
+            }
+        };
+
+        const ALLOWED_ROUNDS = [5, 7, 10, 12, 15];
+        const DEFAULT_TOTAL_ROUNDS = 10;
+        const MEMORIZE_DURATION_MS = 5000; // 5 segundos exactos
+        const GUESS_DURATION_MS = 20000;   // 20 segundos exactos
+
+        // Calcula el puntaje escalonado según posición (0-indexed) y total de jugadores:
+        // - 2 jugadores: 1° = 1 pto, 2° = 0.5 pts
+        // - N >= 3 jugadores: 1° = N pts, 2° = N-1 pts, ..., último = 1 pto
+        function getPointsForRank(rankIndex, totalPlayers) {
+            if (totalPlayers <= 1) return 1;
+            if (totalPlayers === 2) {
+                return rankIndex === 0 ? 1 : 0.5;
+            }
+            return Math.max(1, totalPlayers - rankIndex);
+        }
+
+        function formatScore(val) {
+            const num = Number(val || 0);
+            return Number.isInteger(num) ? String(num) : num.toFixed(1);
+        }
+
+        function buildScoringRuleSummary(totalPlayers) {
+            if (totalPlayers <= 2) {
+                return 'Puntaje (2 jugadores): 1° suma +1 pto · 2° suma +0.5 pts';
+            }
+            const parts = [];
+            const maxPreview = Math.min(totalPlayers, 5);
+            for (let i = 0; i < maxPreview; i++) {
+                const pts = totalPlayers - i;
+                parts.push(`${i + 1}° +${pts}`);
+            }
+            if (totalPlayers > 5) {
+                parts.push(`... ${totalPlayers}° +1`);
+            }
+            return `Puntaje (${totalPlayers} jugadores): ${parts.join(' · ')} pts`;
+        }
+
+        const sandboxChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('colormatch_sandbox_sync') : null;
+
+        const clientState = {
+            uid: 'p-' + Math.random().toString(36).substring(2, 10),
+            nickname: '',
+            isHost: false,
+            useSandboxFallback: false,
+            currentRoomCode: null,
+            pendingInviteCode: null,
+            peer: null,
+            hostConnection: null,
+            guestConnections: {},
+            heartbeatInterval: null,
+            roomData: null,
+            activeTimerInterval: null,
+            currentGuessHex: '#808080',
+            hasSubmittedCurrentRound: false,
+            lastRenderedStatus: null,
+            lastRenderedRound: -1
+        };
+
+        if (sandboxChannel) {
+            sandboxChannel.onmessage = (event) => {
+                handleSandboxChannelMessage(event.data);
+            };
+        }
+
+        window.addEventListener('storage', (event) => {
+            if (event.key && event.key.startsWith(LOCAL_STORAGE_PREFIX) && event.newValue) {
+                try {
+                    const data = JSON.parse(event.newValue);
+                    handleSandboxChannelMessage(data);
+                } catch (e) {}
+            }
+        });
+
+        function handleSandboxChannelMessage(msg) {
+            if (!msg || !clientState.currentRoomCode || msg.roomCode !== clientState.currentRoomCode) return;
+
+            if (clientState.isHost && clientState.roomData) {
+                if (msg.type === 'JOIN_REQUEST') {
+                    const pId = msg.playerId;
+                    const pName = (msg.name || 'Jugador').slice(0, 16);
+                    const currentPlayers = clientState.roomData.players || {};
+                    if (!currentPlayers[pId]) {
+                        currentPlayers[pId] = {
+                            id: pId,
+                            name: pName,
+                            isHost: false,
+                            isBot: false,
+                            score: 0,
+                            totalAccuracy: 0,
+                            roundsPlayed: 0,
+                            joinedAt: Date.now()
+                        };
+                        showToast(`${pName} se unió a la sala`);
+                        broadcastStateFromHost();
+                    }
+                } else if (msg.type === 'SUBMIT_GUESS') {
+                    const pId = msg.playerId;
+                    const hex = normalizeHex(msg.hex) || '#808080';
+                    if (clientState.roomData.status === 'guess' && pId && clientState.roomData.players[pId]) {
+                        clientState.roomData.guesses[pId] = {
+                            playerId: pId,
+                            hex: hex,
+                            submittedAt: Date.now()
+                        };
+                        broadcastStateFromHost();
+                    }
+                }
+            } else if (!clientState.isHost && msg.type === 'STATE_SYNC' && msg.roomData) {
+                const room = msg.roomData;
+                if (msg.serverNow && room.phaseEndTime > msg.serverNow) {
+                    room.localPhaseEndTime = Date.now() + (room.phaseEndTime - msg.serverNow);
+                } else {
+                    room.localPhaseEndTime = 0;
+                }
+                clientState.roomData = room;
+                onRoomDataUpdated(room);
+            }
+        }
+
+        function canUseExternalPeerWebSocket() {
+            if (isWebSocketBlockedBySandbox) return false;
+            const host = (window.location.hostname || '').toLowerCase();
+            const isCanvasSandbox = host.includes('googleusercontent.com') || host.includes('scf.usercontent.goog');
+            if (!isCanvasSandbox && (window.location.protocol === 'https:' || host === 'localhost' || host === '127.0.0.1')) {
+                return true;
+            }
+            try {
+                const testWs = new NativeWebSocket('wss://0.peerjs.com:443/peerjs');
+                testWs.close();
+                return true;
+            } catch (err) {
+                isWebSocketBlockedBySandbox = true;
+                return false;
+            }
+        }
+
+        function startP2PHeartbeat() {
+            stopP2PHeartbeat();
+            clientState.heartbeatInterval = setInterval(() => {
+                if (clientState.isHost) {
+                    Object.values(clientState.guestConnections).forEach(conn => {
+                        if (conn && conn.open) {
+                            try { conn.send({ type: 'PING', t: Date.now() }); } catch (e) {}
+                        }
+                    });
+                } else if (clientState.hostConnection && clientState.hostConnection.open) {
+                    try { clientState.hostConnection.send({ type: 'PING', t: Date.now() }); } catch (e) {}
+                }
+            }, 8000);
+        }
+
+        function stopP2PHeartbeat() {
+            if (clientState.heartbeatInterval) {
+                clearInterval(clientState.heartbeatInterval);
+                clientState.heartbeatInterval = null;
+            }
+        }
+
+        // ==========================================
+        // UTILIDADES MATEMÁTICAS DE COLOR (HEX / RGB / HSL / CIELAB)
+        // ==========================================
+        function normalizeHex(input) {
+            if (!input) return null;
+            let clean = String(input).trim().replace(/^#/, '').replace(/[^0-9A-Fa-f]/g, '');
+            if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
+            if (clean.length === 6) return '#' + clean.toUpperCase();
+            return null;
+        }
+
+        function hexToRgb(hex) {
+            const valid = normalizeHex(hex) || '#808080';
+            const num = parseInt(valid.slice(1), 16);
+            return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+        }
+
+        function rgbToHex(r, g, b) {
+            const clamp = (n) => Math.max(0, Math.min(255, Math.round(n)));
+            return '#' + [clamp(r), clamp(g), clamp(b)]
+                .map(x => x.toString(16).padStart(2, '0'))
+                .join('').toUpperCase();
+        }
+
+        function hslToRgb(h, s, l) {
+            s /= 100; l /= 100;
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            return {
+                r: Math.round(255 * f(0)),
+                g: Math.round(255 * f(8)),
+                b: Math.round(255 * f(4))
+            };
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h = 0, s = 0, l = (max + min) / 2;
+            if (max !== min) {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+        }
+
+        function rgbToLab(rgb) {
+            let r = rgb.r / 255, g = rgb.g / 255, b = rgb.b / 255;
+            r = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+            g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+            b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
+            let x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
+            let y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
+            let z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
+            x = x > 0.008856 ? Math.cbrt(x) : (7.787 * x) + 16 / 116;
+            y = y > 0.008856 ? Math.cbrt(y) : (7.787 * y) + 16 / 116;
+            z = z > 0.008856 ? Math.cbrt(z) : (7.787 * z) + 16 / 116;
+            return { L: (116 * y) - 16, a: 500 * (x - y), b: 200 * (y - z) };
+        }
+
+        function calculateSimilarity(targetHex, guessHex) {
+            const hex1 = normalizeHex(targetHex) || '#000000';
+            const hex2 = normalizeHex(guessHex) || '#808080';
+            if (hex1 === hex2) return 100;
+
+            const rgb1 = hexToRgb(hex1);
+            const rgb2 = hexToRgb(hex2);
+            const dR = rgb1.r - rgb2.r;
+            const dG = rgb1.g - rgb2.g;
+            const dB = rgb1.b - rgb2.b;
+            const euclidean = Math.sqrt(dR * dR + dG * dG + dB * dB);
+            const maxEuclidean = Math.sqrt(255 * 255 * 3);
+            const rgbSim = Math.max(0, 100 * (1 - euclidean / maxEuclidean));
+
+            const lab1 = rgbToLab(rgb1);
+            const lab2 = rgbToLab(rgb2);
+            const deltaE = Math.sqrt(
+                Math.pow(lab1.L - lab2.L, 2) +
+                Math.pow(lab1.a - lab2.a, 2) +
+                Math.pow(lab1.b - lab2.b, 2)
+            );
+            const labSim = Math.max(0, 100 * (1 - deltaE / 115));
+
+            return Number(((rgbSim * 0.55) + (labSim * 0.45)).toFixed(2));
+        }
+
+        function generateRandomTargetHex() {
+            const h = Math.floor(Math.random() * 360);
+            const s = 45 + Math.floor(Math.random() * 50);
+            const l = 28 + Math.floor(Math.random() * 48);
+            const rgb = hslToRgb(h, s, l);
+            return rgbToHex(rgb.r, rgb.g, rgb.b);
+        }
+
+        function generateRoomCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 5; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // ==========================================
+        // INICIALIZACIÓN DE LA APLICACIÓN
+        // ==========================================
+        function initApp() {
+            const savedName = localStorage.getItem('colormatch_nickname');
+            if (savedName) {
+                document.getElementById('input-nickname').value = savedName;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const invitedRoom = urlParams.get('room');
+            if (invitedRoom) {
+                clientState.pendingInviteCode = invitedRoom.trim().toUpperCase();
+                document.getElementById('invite-banner').classList.remove('hidden');
+                document.getElementById('invite-code-label').textContent = clientState.pendingInviteCode;
+                document.getElementById('input-join-code').value = clientState.pendingInviteCode;
+            }
+
+            showView('view-register');
+        }
+
+        const ALL_VIEWS = [
+            'view-loading',
+            'view-register',
+            'view-menu',
+            'view-lobby',
+            'view-memorize',
+            'view-guess',
+            'view-round-results',
+            'view-game-over'
+        ];
+
+        function showView(viewId) {
+            ALL_VIEWS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (id === viewId) el.classList.remove('hidden');
+                    else el.classList.add('hidden');
+                }
+            });
+        }
+
+        function setP2PStatusBadge(state, text) {
+            const badge = document.getElementById('header-p2p-status');
+            const dot = document.getElementById('p2p-dot');
+            const label = document.getElementById('p2p-status-text');
+            if (!state) {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+                return;
+            }
+            badge.classList.remove('hidden');
+            badge.classList.add('flex');
+            label.textContent = text || 'P2P Activo';
+
+            if (state === 'connecting') {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-[#FF9500] border border-hrInk animate-ping';
+            } else if (state === 'connected') {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-[#28CD41] border border-hrInk';
+            } else {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-[#FF3B30] border border-hrInk';
+            }
+        }
+
+        // ==========================================
+        // FLUJO 1: REGISTRO DE NOMBRE Y MENÚ
+        // ==========================================
+        window.submitNickname = function () {
+            const input = document.getElementById('input-nickname');
+            const name = input.value.trim();
+            if (!name) {
+                showToast('Por favor escribe tu nombre o apodo para continuar', 'warning');
+                input.focus();
+                return;
+            }
+            clientState.nickname = name.slice(0, 16);
+            localStorage.setItem('colormatch_nickname', clientState.nickname);
+
+            document.getElementById('header-username').textContent = clientState.nickname;
+            document.getElementById('header-controls-row').classList.remove('hidden');
+            document.getElementById('header-controls-row').classList.add('flex');
+            document.getElementById('header-user-badge').classList.remove('hidden');
+            document.getElementById('header-user-badge').classList.add('flex');
+            document.getElementById('menu-greeting-name').textContent = clientState.nickname;
+
+            showView('view-menu');
+
+            if (clientState.pendingInviteCode) {
+                document.getElementById('input-join-code').value = clientState.pendingInviteCode;
+                showToast(`Código ${clientState.pendingInviteCode} listo. Pulsa "Entrar a la Sala"`);
+            }
+        };
+
+        window.changeNickname = function () {
+            showView('view-register');
+        };
+
+        // ==========================================
+        // FLUJO 2: ARQUITECTURA P2P HOST & CLIENT (PEERJS)
+        // ==========================================
+        function destroyPeerSession() {
+            clearActiveTimer();
+            stopP2PHeartbeat();
+            if (clientState.hostConnection) {
+                try { clientState.hostConnection.close(); } catch (e) {}
+                clientState.hostConnection = null;
+            }
+            Object.values(clientState.guestConnections).forEach(conn => {
+                try { conn.close(); } catch (e) {}
+            });
+            clientState.guestConnections = {};
+            if (clientState.peer) {
+                try { clientState.peer.destroy(); } catch (e) {}
+                clientState.peer = null;
+            }
+            setP2PStatusBadge(null);
+        }
+
+        function initializeHostRoomState(roomCode, modeLabel) {
+            const initialTargets = Array.from({ length: DEFAULT_TOTAL_ROUNDS }, () => generateRandomTargetHex());
+            clientState.currentRoomCode = roomCode;
+            clientState.roomData = {
+                code: roomCode,
+                hostId: clientState.uid,
+                hostName: clientState.nickname,
+                status: 'lobby',
+                currentRound: 0,
+                totalRounds: DEFAULT_TOTAL_ROUNDS,
+                roundTargets: initialTargets,
+                roundDurationMs: 0,
+                phaseStartTime: Date.now(),
+                phaseEndTime: 0,
+                roundScored: false,
+                players: {
+                    [clientState.uid]: {
+                        id: clientState.uid,
+                        name: clientState.nickname,
+                        isHost: true,
+                        isBot: false,
+                        score: 0,
+                        totalAccuracy: 0,
+                        roundsPlayed: 0,
+                        joinedAt: Date.now()
+                    }
+                },
+                guesses: {}
+            };
+
+            activateRoomHeaderUI(roomCode);
+            setP2PStatusBadge('connected', modeLabel);
+            broadcastStateFromHost();
+            showToast(`¡Sala ${roomCode} creada! Comparte el link o añade Bots IA.`);
+        }
+
+        window.createRoom = function () {
+            destroyPeerSession();
+            const roomCode = generateRoomCode();
+            clientState.isHost = true;
+
+            if (!canUseExternalPeerWebSocket() || typeof Peer === 'undefined') {
+                clientState.useSandboxFallback = true;
+                initializeHostRoomState(roomCode, 'Vista Previa');
+                return;
+            }
+
+            clientState.useSandboxFallback = false;
+            const peerId = `${ROOM_PREFIX}${roomCode}`;
+
+            document.getElementById('loading-status-msg').textContent = `Creando sala ${roomCode} en la red WebRTC...`;
+            showView('view-loading');
+            setP2PStatusBadge('connecting', 'Abriendo Sala...');
+
+            let opened = false;
+            let peer = null;
+            try {
+                peer = new Peer(peerId, PEER_CONFIG);
+                clientState.peer = peer;
+            } catch (err) {
+                clientState.useSandboxFallback = true;
+                initializeHostRoomState(roomCode, 'Vista Previa');
+                return;
+            }
+
+            const fallbackTimer = setTimeout(() => {
+                if (!opened && clientState.isHost && !clientState.currentRoomCode) {
+                    clientState.useSandboxFallback = true;
+                    initializeHostRoomState(roomCode, 'Modo Local');
+                }
+            }, 7000);
+
+            peer.on('open', () => {
+                opened = true;
+                clearTimeout(fallbackTimer);
+                startP2PHeartbeat();
+                initializeHostRoomState(roomCode, 'Online P2P Activo');
+            });
+
+            peer.on('connection', (conn) => {
+                setupHostGuestConnection(conn);
+            });
+
+            peer.on('disconnected', () => {
+                if (clientState.peer && !clientState.peer.destroyed) {
+                    try { clientState.peer.reconnect(); } catch (e) {}
+                }
+            });
+
+            peer.on('error', (err) => {
+                clearTimeout(fallbackTimer);
+                if (err && err.type === 'unavailable-id') {
+                    window.createRoom();
+                    return;
+                }
+                if (!opened) {
+                    clientState.useSandboxFallback = true;
+                    initializeHostRoomState(roomCode, 'Vista Previa');
+                }
+            });
+        };
+
+        function setupHostGuestConnection(conn) {
+            conn.on('data', (msg) => {
+                if (!msg || typeof msg !== 'object') return;
+                if (msg.type === 'PING') {
+                    try { conn.send({ type: 'PONG', t: Date.now() }); } catch (e) {}
+                    return;
+                }
+                const room = clientState.roomData;
+                if (!room) return;
+
+                if (msg.type === 'JOIN_REQUEST') {
+                    const pId = msg.playerId;
+                    const pName = (msg.name || 'Jugador').slice(0, 16);
+                    const currentPlayers = room.players || {};
+
+                    conn.playerId = pId;
+                    clientState.guestConnections[pId] = conn;
+
+                    if (currentPlayers[pId]) {
+                        currentPlayers[pId].name = pName;
+                    } else {
+                        currentPlayers[pId] = {
+                            id: pId,
+                            name: pName,
+                            isHost: false,
+                            isBot: false,
+                            score: 0,
+                            totalAccuracy: 0,
+                            roundsPlayed: 0,
+                            joinedAt: Date.now()
+                        };
+                        showToast(`${pName} se unió a la sala`);
+                    }
+
+                    broadcastStateFromHost();
+                }
+
+                if (msg.type === 'SUBMIT_GUESS') {
+                    const pId = msg.playerId;
+                    const hex = normalizeHex(msg.hex) || '#808080';
+                    if (room.status === 'guess' && pId && room.players[pId]) {
+                        room.guesses[pId] = {
+                            playerId: pId,
+                            hex: hex,
+                            submittedAt: Date.now()
+                        };
+                        broadcastStateFromHost();
+                    }
+                }
+            });
+
+            conn.on('close', () => {
+                const pId = conn.playerId;
+                if (pId && clientState.roomData && clientState.roomData.players[pId]) {
+                    const leftName = clientState.roomData.players[pId].name;
+                    delete clientState.guestConnections[pId];
+                    if (clientState.roomData.status === 'lobby') {
+                        delete clientState.roomData.players[pId];
+                        showToast(`${leftName} salió de la sala`, 'warning');
+                        broadcastStateFromHost();
+                    }
+                }
+            });
+        }
+
+        function broadcastStateFromHost() {
+            if (!clientState.isHost || !clientState.roomData) return;
+            const payload = {
+                type: 'STATE_SYNC',
+                roomCode: clientState.currentRoomCode,
+                serverNow: Date.now(),
+                roomData: clientState.roomData
+            };
+            Object.values(clientState.guestConnections).forEach(conn => {
+                if (conn && conn.open) {
+                    try { conn.send(payload); } catch (e) {}
+                }
+            });
+            if (sandboxChannel) {
+                try { sandboxChannel.postMessage(payload); } catch (e) {}
+            }
+            try {
+                localStorage.setItem(LOCAL_STORAGE_PREFIX + clientState.currentRoomCode, JSON.stringify(payload));
+            } catch (e) {}
+
+            onRoomDataUpdated(clientState.roomData);
+        }
+
+        window.joinRoomByInput = function () {
+            const codeInput = document.getElementById('input-join-code');
+            const code = codeInput.value.trim().toUpperCase();
+            if (code.length < 4) {
+                showToast('Ingresa el código de 5 letras de la sala', 'warning');
+                codeInput.focus();
+                return;
+            }
+
+            destroyPeerSession();
+            clientState.isHost = false;
+
+            const localSaved = localStorage.getItem(LOCAL_STORAGE_PREFIX + code);
+            const canUseP2P = canUseExternalPeerWebSocket() && typeof Peer !== 'undefined';
+
+            if (!canUseP2P) {
+                clientState.useSandboxFallback = true;
+                clientState.currentRoomCode = code;
+                activateRoomHeaderUI(code);
+                setP2PStatusBadge('connected', 'Vista Previa');
+
+                const joinMsg = {
+                    type: 'JOIN_REQUEST',
+                    roomCode: code,
+                    playerId: clientState.uid,
+                    name: clientState.nickname
+                };
+                if (sandboxChannel) {
+                    try { sandboxChannel.postMessage(joinMsg); } catch (e) {}
+                }
+                if (localSaved) {
+                    try {
+                        const parsed = JSON.parse(localSaved);
+                        if (parsed && parsed.roomData) {
+                            parsed.roomData.players[clientState.uid] = {
+                                id: clientState.uid,
+                                name: clientState.nickname,
+                                isHost: false,
+                                isBot: false,
+                                score: 0,
+                                totalAccuracy: 0,
+                                roundsPlayed: 0,
+                                joinedAt: Date.now()
+                            };
+                            clientState.roomData = parsed.roomData;
+                            localStorage.setItem(LOCAL_STORAGE_PREFIX + code, JSON.stringify(parsed));
+                            onRoomDataUpdated(parsed.roomData);
+                            return;
+                        }
+                    } catch (e) {}
+                }
+                showToast(`En Vista Previa crea una sala y usa "+ Añadir Bot IA", o alójalo en GitHub/Netlify para conectar varios dispositivos.`, 'warning');
+                window.leaveRoom();
+                return;
+            }
+
+            clientState.useSandboxFallback = false;
+            document.getElementById('loading-status-msg').textContent = `Conectando con la sala ${code}...`;
+            showView('view-loading');
+            setP2PStatusBadge('connecting', 'Conectando...');
+
+            const peer = new Peer(undefined, PEER_CONFIG);
+            clientState.peer = peer;
+
+            let connectedFlag = false;
+            const connectionTimeout = setTimeout(() => {
+                if (!connectedFlag) {
+                    showToast(`No se encontró la sala ${code}. Verifica que el líder la tenga abierta.`, 'error');
+                    window.leaveRoom();
+                }
+            }, 12000);
+
+            peer.on('open', () => {
+                const hostPeerId = `${ROOM_PREFIX}${code}`;
+                const conn = peer.connect(hostPeerId, { reliable: true });
+                clientState.hostConnection = conn;
+
+                conn.on('open', () => {
+                    connectedFlag = true;
+                    clearTimeout(connectionTimeout);
+                    clientState.currentRoomCode = code;
+                    activateRoomHeaderUI(code);
+                    setP2PStatusBadge('connected', 'Online P2P');
+                    startP2PHeartbeat();
+
+                    conn.send({
+                        type: 'JOIN_REQUEST',
+                        playerId: clientState.uid,
+                        name: clientState.nickname
+                    });
+                });
+
+                conn.on('data', (msg) => {
+                    if (!msg || typeof msg !== 'object') return;
+                    if (msg.type === 'PING') {
+                        try { conn.send({ type: 'PONG', t: Date.now() }); } catch (e) {}
+                        return;
+                    }
+
+                    if (msg.type === 'JOIN_REJECTED') {
+                        clearTimeout(connectionTimeout);
+                        showToast(msg.reason || 'No se pudo entrar a la sala', 'error');
+                        window.leaveRoom();
+                        return;
+                    }
+
+                    if (msg.type === 'STATE_SYNC' && msg.roomData) {
+                        const room = msg.roomData;
+                        if (msg.serverNow && room.phaseEndTime > msg.serverNow) {
+                            const remainingMs = room.phaseEndTime - msg.serverNow;
+                            room.localPhaseEndTime = Date.now() + remainingMs;
+                        } else {
+                            room.localPhaseEndTime = 0;
+                        }
+                        clientState.roomData = room;
+                        onRoomDataUpdated(room);
+                    }
+                });
+
+                conn.on('close', () => {
+                    showToast('Se cerró la conexión con el líder de la sala', 'warning');
+                    window.leaveRoom();
+                });
+
+                conn.on('error', () => {
+                    clearTimeout(connectionTimeout);
+                    showToast('Error de comunicación con la sala', 'error');
+                    window.leaveRoom();
+                });
+            });
+
+            peer.on('error', () => {
+                clearTimeout(connectionTimeout);
+                showToast(`No se encontró la sala ${code} o el líder no está conectado.`, 'error');
+                window.leaveRoom();
+            });
+        };
+
+        function activateRoomHeaderUI(roomCode) {
+            document.getElementById('header-room-code').textContent = roomCode;
+            document.getElementById('header-controls-row').classList.remove('hidden');
+            document.getElementById('header-controls-row').classList.add('flex');
+            document.getElementById('header-room-badge').classList.remove('hidden');
+            document.getElementById('header-room-badge').classList.add('flex');
+            document.getElementById('btn-leave-room').classList.remove('hidden');
+            document.getElementById('btn-leave-room').classList.add('flex');
+        }
+
+        window.leaveRoom = function () {
+            destroyPeerSession();
+            clientState.currentRoomCode = null;
+            clientState.roomData = null;
+            clientState.lastRenderedStatus = null;
+            clientState.lastRenderedRound = -1;
+
+            document.getElementById('header-room-badge').classList.add('hidden');
+            document.getElementById('btn-leave-room').classList.add('hidden');
+            showView('view-menu');
+        };
+
+        // ==========================================
+        // MÁQUINA DE ESTADOS SINCRONIZADA
+        // ==========================================
+        function onRoomDataUpdated(room) {
+            if (!room) return;
+            const isHost = room.hostId === clientState.uid;
+            const playersList = Object.values(room.players || {}).sort((a, b) => a.joinedAt - b.joinedAt);
+
+            if (room.status === 'lobby') {
+                clearActiveTimer();
+                clientState.lastRenderedStatus = 'lobby';
+                clientState.lastRenderedRound = -1;
+                showView('view-lobby');
+                renderLobby(room, playersList, isHost);
+                return;
+            }
+
+            if (room.status === 'memorize') {
+                if (clientState.lastRenderedStatus !== 'memorize' || clientState.lastRenderedRound !== room.currentRound) {
+                    clientState.lastRenderedStatus = 'memorize';
+                    clientState.lastRenderedRound = room.currentRound;
+                    clientState.hasSubmittedCurrentRound = false;
+                    showView('view-memorize');
+                    startMemorizePhaseUI(room, isHost);
+                }
+                return;
+            }
+
+            if (room.status === 'guess') {
+                if (clientState.lastRenderedStatus !== 'guess' || clientState.lastRenderedRound !== room.currentRound) {
+                    clientState.lastRenderedStatus = 'guess';
+                    clientState.lastRenderedRound = room.currentRound;
+                    showView('view-guess');
+                    startGuessPhaseUI(room, isHost);
+                }
+                updateGuessReadyCounter(room, playersList, isHost);
+                return;
+            }
+
+            if (room.status === 'round_results') {
+                clearActiveTimer();
+                clientState.lastRenderedStatus = 'round_results';
+                showView('view-round-results');
+                renderRoundResultsUI(room, playersList, isHost);
+                return;
+            }
+
+            if (room.status === 'game_over') {
+                clearActiveTimer();
+                clientState.lastRenderedStatus = 'game_over';
+                showView('view-game-over');
+                renderGameOverUI(room, playersList, isHost);
+            }
+        }
+
+        // ==========================================
+        // RENDERIZADO Y LÓGICA DEL LOBBY (SIN DEGRADADOS)
+        // ==========================================
+        const SOLID_AVATAR_COLORS = ['#F7E354', '#2684FF', '#FF3B30', '#28CD41', '#FF9500', '#AF52DE'];
+
+        function renderLobby(room, playersList, isHost) {
+            const selectedRounds = ALLOWED_ROUNDS.includes(Number(room.totalRounds)) ? Number(room.totalRounds) : DEFAULT_TOTAL_ROUNDS;
+            room.totalRounds = selectedRounds;
+
+            document.getElementById('lobby-room-code').textContent = room.code;
+            document.getElementById('lobby-player-count').textContent = playersList.length;
+            document.getElementById('lobby-host-name').textContent = room.hostName || 'Líder';
+
+            const headerSummary = document.getElementById('header-rules-summary');
+            if (headerSummary) {
+                headerSummary.textContent = `5s Ver · 20s Buscar · ${selectedRounds} Rondas`;
+            }
+
+            const startBtnLabel = document.getElementById('btn-start-game-label');
+            if (startBtnLabel) {
+                startBtnLabel.textContent = `¡Iniciar Partida (${selectedRounds} Rondas)!`;
+            }
+
+            const guestRoundsCount = document.getElementById('guest-lobby-rounds-count');
+            if (guestRoundsCount) {
+                guestRoundsCount.textContent = selectedRounds;
+            }
+
+            // Actualizar estado visual de los botones de rondas (5, 7, 10, 12, 15)
+            document.querySelectorAll('.round-opt-btn').forEach(btn => {
+                const rVal = Number(btn.getAttribute('data-rounds'));
+                if (rVal === selectedRounds) {
+                    btn.className = 'round-opt-btn px-3.5 py-1.5 hr-pill-yellow text-xs font-black';
+                } else {
+                    btn.className = 'round-opt-btn px-3.5 py-1.5 hr-pill-white text-xs font-bold';
+                }
+            });
+
+            const ruleBadge = document.getElementById('lobby-scoring-rule-badge');
+            ruleBadge.textContent = buildScoringRuleSummary(playersList.length);
+            ruleBadge.className = 'text-xs font-bold px-3.5 py-1 rounded-full bg-hrYellow text-hrInk border border-hrInk';
+
+            const grid = document.getElementById('lobby-players-grid');
+            grid.innerHTML = '';
+
+            // Renderizar dinámicamente una casilla por cada jugador presente en la sala
+            playersList.forEach((p, i) => {
+                const slot = document.createElement('div');
+                const isMe = p.id === clientState.uid;
+                const colorIdx = i % SOLID_AVATAR_COLORS.length;
+                const avatarColor = SOLID_AVATAR_COLORS[colorIdx];
+                const avatarText = (colorIdx === 1 || colorIdx === 2 || colorIdx === 5) ? '#FFFFFF' : '#111111';
+
+                slot.className = `p-4 rounded-2xl border-2 border-hrInk flex items-center justify-between animate-pop ${
+                    isMe ? 'bg-hrYellow shadow-[0_3px_0_#111111]' : 'bg-[#FAF9F5]'
+                }`;
+                slot.innerHTML = `
+                    <div class="flex items-center gap-3 truncate">
+                        <div class="w-10 h-10 rounded-full border-[1.5px] border-hrInk font-black flex items-center justify-center text-sm flex-shrink-0" style="background-color: ${avatarColor}; color: ${avatarText};">
+                            ${escapeHtml(p.name.charAt(0).toUpperCase())}
+                        </div>
+                        <div class="truncate">
+                            <div class="font-bold text-sm text-hrInk flex items-center gap-1.5 truncate">
+                                <span>${escapeHtml(p.name)}</span>
+                                ${isMe ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-white border border-hrInk font-black">TÚ</span>' : ''}
+                            </div>
+                            <div class="text-[11px] font-medium text-neutral-600">
+                                ${p.isHost ? '<i class="fa-solid fa-crown mr-1"></i>Líder de Sala' : (p.isBot ? '<i class="fa-solid fa-robot mr-1"></i>Bot IA' : `Jugador #${i + 1}`)}
+                            </div>
+                        </div>
+                    </div>
+                    ${isHost && p.isBot ? `
+                        <button onclick="window.removeBot('${p.id}')" class="w-7 h-7 rounded-full bg-white border border-hrInk text-hrInk hover:bg-[#FF3B30] hover:text-white text-xs flex items-center justify-center" title="Quitar Bot">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    ` : '<span class="w-3 h-3 rounded-full bg-[#28CD41] border border-hrInk mr-1"></span>'}
+                `;
+                grid.appendChild(slot);
+            });
+
+            // Casilla dinámica adicional al final indicando que pueden seguir entrando más jugadores
+            const waitingSlot = document.createElement('div');
+            waitingSlot.className = 'p-4 rounded-2xl border-2 border-dashed border-neutral-300 bg-[#FAF9F5]/50 flex items-center justify-center text-xs text-neutral-400 font-semibold h-[74px]';
+            waitingSlot.innerHTML = `<i class="fa-solid fa-user-plus mr-2"></i> Esperando jugador #${playersList.length + 1}...`;
+            grid.appendChild(waitingSlot);
+
+            const hostControls = document.getElementById('host-lobby-controls');
+            const guestWait = document.getElementById('guest-lobby-wait');
+            if (isHost) {
+                hostControls.classList.remove('hidden');
+                guestWait.classList.add('hidden');
+            } else {
+                hostControls.classList.add('hidden');
+                guestWait.classList.remove('hidden');
+            }
+        }
+
+        window.setTotalRoundsByHost = function (roundsCount) {
+            const room = clientState.roomData;
+            if (!room || !clientState.isHost) return;
+            const validRounds = ALLOWED_ROUNDS.includes(Number(roundsCount)) ? Number(roundsCount) : DEFAULT_TOTAL_ROUNDS;
+            room.totalRounds = validRounds;
+            broadcastStateFromHost();
+        };
+
+        window.addBotPlayer = function () {
+            const room = clientState.roomData;
+            if (!room || !clientState.isHost) return;
+            const currentPlayers = room.players || {};
+            const count = Object.keys(currentPlayers).length;
+
+            const botNames = ['Bot Croma', 'Bot Prisma', 'Bot Pixel', 'Bot Estudio', 'Bot Iris', 'Bot Matiz', 'Bot Neón', 'Bot Pastel'];
+            const botId = 'bot-' + Math.random().toString(36).substring(2, 7);
+            const botName = `${botNames[(count - 1) % botNames.length]} ${count > botNames.length ? count : ''}`.trim();
+
+            room.players[botId] = {
+                id: botId,
+                name: botName,
+                isHost: false,
+                isBot: true,
+                score: 0,
+                totalAccuracy: 0,
+                roundsPlayed: 0,
+                joinedAt: Date.now()
+            };
+
+            broadcastStateFromHost();
+        };
+
+        window.removeBot = function (botId) {
+            const room = clientState.roomData;
+            if (!room || !clientState.isHost) return;
+            delete room.players[botId];
+            broadcastStateFromHost();
+        };
+
+        window.startGameByHost = function () {
+            const room = clientState.roomData;
+            if (!room || !clientState.isHost) return;
+
+            const playersList = Object.values(room.players || {});
+            if (playersList.length < 2) {
+                showToast('Se necesitan al menos 2 jugadores (invita a un amigo o añade un Bot IA)', 'warning');
+                return;
+            }
+
+            const totalRounds = ALLOWED_ROUNDS.includes(Number(room.totalRounds)) ? Number(room.totalRounds) : DEFAULT_TOTAL_ROUNDS;
+            room.totalRounds = totalRounds;
+
+            const customInput = document.getElementById('host-custom-colors').value.trim();
+            const customHexes = customInput
+                ? customInput.split(',').map(s => normalizeHex(s)).filter(Boolean)
+                : [];
+
+            const targets = [];
+            for (let i = 0; i < totalRounds; i++) {
+                targets.push(customHexes[i] || generateRandomTargetHex());
+            }
+
+            playersList.forEach(p => {
+                room.players[p.id] = {
+                    ...p,
+                    score: 0,
+                    totalAccuracy: 0,
+                    roundsPlayed: 0
+                };
+            });
+
+            const now = Date.now();
+            room.status = 'memorize';
+            room.currentRound = 0;
+            room.roundTargets = targets;
+            room.guesses = {};
+            room.roundScored = false;
+            room.phaseStartTime = now;
+            room.phaseEndTime = now + MEMORIZE_DURATION_MS;
+            room.localPhaseEndTime = room.phaseEndTime;
+
+            broadcastStateFromHost();
+        };
+
+        // ==========================================
+        // FASE 1: MEMORIZACIÓN (5 SEGUNDOS)
+        // ==========================================
+        function startMemorizePhaseUI(room, isHost) {
+            clearActiveTimer();
+            const roundIdx = room.currentRound || 0;
+            const totalRounds = room.totalRounds || DEFAULT_TOTAL_ROUNDS;
+            const targetHex = room.roundTargets[roundIdx] || '#FF5733';
+
+            document.getElementById('mem-round-num').textContent = roundIdx + 1;
+            document.getElementById('mem-total-rounds').textContent = totalRounds;
+            document.getElementById('memorize-color-box').style.backgroundColor = targetHex;
+
+            const endTime = room.localPhaseEndTime || room.phaseEndTime || (Date.now() + MEMORIZE_DURATION_MS);
+
+            clientState.activeTimerInterval = setInterval(() => {
+                const remainingMs = Math.max(0, endTime - Date.now());
+                const remainingSec = (remainingMs / 1000).toFixed(1);
+                const pct = Math.max(0, Math.min(100, (remainingMs / MEMORIZE_DURATION_MS) * 100));
+
+                document.getElementById('mem-timer-text').textContent = `${remainingSec}s`;
+                document.getElementById('mem-big-countdown').textContent = remainingSec;
+                document.getElementById('mem-progress-bar').style.width = `${pct}%`;
+
+                if (remainingMs <= 0) {
+                    clearActiveTimer();
+                    if (isHost && clientState.roomData?.status === 'memorize') {
+                        const now = Date.now();
+                        clientState.roomData.status = 'guess';
+                        clientState.roomData.phaseStartTime = now;
+                        clientState.roomData.phaseEndTime = now + GUESS_DURATION_MS;
+                        clientState.roomData.localPhaseEndTime = now + GUESS_DURATION_MS;
+                        clientState.roomData.guesses = {};
+                        clientState.roomData.roundScored = false;
+                        broadcastStateFromHost();
+                    }
+                }
+            }, 60);
+        }
+
+        // ==========================================
+        // FASE 2: BÚSQUEDA DEL COLOR (20 SEGUNDOS)
+        // ==========================================
+        function startGuessPhaseUI(room, isHost) {
+            clearActiveTimer();
+            const roundIdx = room.currentRound || 0;
+            const totalRounds = room.totalRounds || DEFAULT_TOTAL_ROUNDS;
+            document.getElementById('guess-round-num').textContent = roundIdx + 1;
+            document.getElementById('guess-total-rounds').textContent = totalRounds;
+
+            clientState.hasSubmittedCurrentRound = false;
+            setPlayerPickerColor('#808080');
+
+            const submitBtn = document.getElementById('btn-submit-guess');
+            submitBtn.disabled = false;
+            submitBtn.className = 'w-full sm:w-auto px-8 py-4 hr-pill-yellow font-black text-base flex items-center justify-center gap-2';
+            submitBtn.innerHTML = '<i class="fa-solid fa-check-double"></i><span>¡Confirmar y Enviar Tono!</span>';
+
+            if (isHost) {
+                triggerBotGuesses(room);
+            }
+
+            const endTime = room.localPhaseEndTime || room.phaseEndTime || (Date.now() + GUESS_DURATION_MS);
+
+            clientState.activeTimerInterval = setInterval(() => {
+                const remainingMs = Math.max(0, endTime - Date.now());
+                const remainingSec = (remainingMs / 1000).toFixed(1);
+                const pct = Math.max(0, Math.min(100, (remainingMs / GUESS_DURATION_MS) * 100));
+
+                document.getElementById('guess-timer-display').textContent = `${remainingSec}s`;
+                document.getElementById('guess-progress-bar').style.width = `${pct}%`;
+
+                if (remainingMs <= 0) {
+                    clearActiveTimer();
+                    if (!clientState.hasSubmittedCurrentRound) {
+                        window.lockInColorGuess(true);
+                    }
+                    if (isHost) {
+                        setTimeout(() => finalizeRoundByHost(), 450);
+                    }
+                }
+            }, 80);
+        }
+
+        function triggerBotGuesses(room) {
+            const targetHex = room.roundTargets[room.currentRound] || '#FF5733';
+            const targetRgb = hexToRgb(targetHex);
+            const playersList = Object.values(room.players || {});
+            let updated = false;
+
+            playersList.forEach(p => {
+                if (p.isBot) {
+                    const jitter = () => Math.floor((Math.random() - 0.5) * 65);
+                    const botHex = rgbToHex(targetRgb.r + jitter(), targetRgb.g + jitter(), targetRgb.b + jitter());
+                    room.guesses[p.id] = {
+                        playerId: p.id,
+                        hex: botHex,
+                        submittedAt: Date.now()
+                    };
+                    updated = true;
+                }
+            });
+
+            if (updated) {
+                broadcastStateFromHost();
+            }
+        }
+
+        function updateGuessReadyCounter(room, playersList, isHost) {
+            const guesses = room.guesses || {};
+            const readyCount = Object.keys(guesses).length;
+            const totalPlayers = playersList.length;
+
+            document.getElementById('guess-ready-count').textContent = `${readyCount}/${totalPlayers}`;
+
+            if (isHost && readyCount >= totalPlayers && totalPlayers > 0 && room.status === 'guess') {
+                clearActiveTimer();
+                finalizeRoundByHost();
+            }
+        }
+
+        function setPlayerPickerColor(hex, skipHslSync = false) {
+            const validHex = normalizeHex(hex) || '#808080';
+            clientState.currentGuessHex = validHex;
+
+            document.getElementById('player-current-swatch').style.backgroundColor = validHex;
+            document.getElementById('player-current-hex-badge').textContent = validHex;
+            document.getElementById('guess-native-picker').value = validHex;
+
+            const hexInput = document.getElementById('guess-hex-input');
+            if (document.activeElement !== hexInput) {
+                hexInput.value = validHex.replace('#', '');
+            }
+
+            const rgb = hexToRgb(validHex);
+            document.getElementById('slider-r').value = rgb.r;
+            document.getElementById('slider-g').value = rgb.g;
+            document.getElementById('slider-b').value = rgb.b;
+            document.getElementById('lbl-r').textContent = rgb.r;
+            document.getElementById('lbl-g').textContent = rgb.g;
+            document.getElementById('lbl-b').textContent = rgb.b;
+
+            if (!skipHslSync) {
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                document.getElementById('slider-h').value = hsl.h;
+                document.getElementById('slider-s').value = hsl.s;
+                document.getElementById('slider-l').value = hsl.l;
+                document.getElementById('lbl-hue').textContent = `${hsl.h}°`;
+                document.getElementById('lbl-sat').textContent = `${hsl.s}%`;
+                document.getElementById('lbl-light').textContent = `${hsl.l}%`;
+            }
+        }
+
+        window.onHslSliderChange = function () {
+            if (clientState.hasSubmittedCurrentRound) return;
+            const h = parseInt(document.getElementById('slider-h').value, 10);
+            const s = parseInt(document.getElementById('slider-s').value, 10);
+            const l = parseInt(document.getElementById('slider-l').value, 10);
+
+            document.getElementById('lbl-hue').textContent = `${h}°`;
+            document.getElementById('lbl-sat').textContent = `${s}%`;
+            document.getElementById('lbl-light').textContent = `${l}%`;
+
+            const rgb = hslToRgb(h, s, l);
+            const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+            setPlayerPickerColor(hex, true);
+        };
+
+        window.onRgbSliderChange = function () {
+            if (clientState.hasSubmittedCurrentRound) return;
+            const r = parseInt(document.getElementById('slider-r').value, 10);
+            const g = parseInt(document.getElementById('slider-g').value, 10);
+            const b = parseInt(document.getElementById('slider-b').value, 10);
+            const hex = rgbToHex(r, g, b);
+            setPlayerPickerColor(hex, false);
+        };
+
+        window.onGuessHexTyped = function (val) {
+            if (clientState.hasSubmittedCurrentRound) return;
+            const valid = normalizeHex(val);
+            if (valid) setPlayerPickerColor(valid, false);
+        };
+
+        window.onGuessNativePicker = function (val) {
+            if (clientState.hasSubmittedCurrentRound) return;
+            const valid = normalizeHex(val);
+            if (valid) setPlayerPickerColor(valid, false);
+        };
+
+        window.lockInColorGuess = function (isAutoTimeout = false) {
+            if (clientState.hasSubmittedCurrentRound || !clientState.currentRoomCode) return;
+            clientState.hasSubmittedCurrentRound = true;
+
+            const submitBtn = document.getElementById('btn-submit-guess');
+            submitBtn.disabled = true;
+            submitBtn.className = 'w-full sm:w-auto px-8 py-4 rounded-full font-bold text-base bg-[#28CD41] text-hrInk border-2 border-hrInk flex items-center justify-center gap-2 cursor-not-allowed';
+            submitBtn.innerHTML = `<i class="fa-solid fa-lock"></i><span>Color Fijado (${clientState.currentGuessHex})</span>`;
+
+            if (!isAutoTimeout) {
+                showToast(`¡Color ${clientState.currentGuessHex} enviado!`);
+            }
+
+            if (clientState.isHost && clientState.roomData) {
+                clientState.roomData.guesses[clientState.uid] = {
+                    playerId: clientState.uid,
+                    hex: clientState.currentGuessHex,
+                    submittedAt: Date.now()
+                };
+                broadcastStateFromHost();
+            } else if (clientState.hostConnection && clientState.hostConnection.open) {
+                clientState.hostConnection.send({
+                    type: 'SUBMIT_GUESS',
+                    playerId: clientState.uid,
+                    hex: clientState.currentGuessHex
+                });
+            } else if (clientState.useSandboxFallback && sandboxChannel) {
+                sandboxChannel.postMessage({
+                    type: 'SUBMIT_GUESS',
+                    roomCode: clientState.currentRoomCode,
+                    playerId: clientState.uid,
+                    hex: clientState.currentGuessHex
+                });
+            }
+        };
+
+        // ==========================================
+        // CÁLCULO DE RESULTADOS Y REGLA DE PUNTOS ESCALONADA
+        // ==========================================
+        function finalizeRoundByHost() {
+            const room = clientState.roomData;
+            if (!room || !clientState.isHost || room.roundScored) return;
+
+            const roundIdx = room.currentRound || 0;
+            const targetHex = room.roundTargets[roundIdx] || '#FF5733';
+            const playersMap = room.players || {};
+            const guessesMap = room.guesses || {};
+            const playerIds = Object.keys(playersMap);
+            const totalPlayers = playerIds.length;
+
+            playerIds.forEach(pid => {
+                if (!guessesMap[pid]) {
+                    guessesMap[pid] = {
+                        playerId: pid,
+                        hex: pid === clientState.uid ? clientState.currentGuessHex : '#808080',
+                        submittedAt: Date.now()
+                    };
+                }
+            });
+
+            const ranking = playerIds.map(pid => {
+                const gHex = guessesMap[pid].hex;
+                const similarity = calculateSimilarity(targetHex, gHex);
+                return {
+                    playerId: pid,
+                    hex: gHex,
+                    similarity
+                };
+            }).sort((a, b) => b.similarity - a.similarity);
+
+            ranking.forEach((item, index) => {
+                const p = playersMap[item.playerId];
+                const earnedPoints = getPointsForRank(index, totalPlayers);
+                if (p) {
+                    p.score = Number(((p.score || 0) + earnedPoints).toFixed(2));
+                    p.totalAccuracy = Number(((p.totalAccuracy || 0) + item.similarity).toFixed(2));
+                    p.roundsPlayed = (p.roundsPlayed || 0) + 1;
+                }
+                guessesMap[item.playerId].similarity = item.similarity;
+                guessesMap[item.playerId].pointsEarned = earnedPoints;
+                guessesMap[item.playerId].rank = index + 1;
+            });
+
+            room.status = 'round_results';
+            room.roundScored = true;
+            broadcastStateFromHost();
+        }
+
+        function renderRoundResultsUI(room, playersList, isHost) {
+            const roundIdx = room.currentRound || 0;
+            const totalRounds = room.totalRounds || DEFAULT_TOTAL_ROUNDS;
+            const targetHex = room.roundTargets[roundIdx] || '#FF5733';
+            const guesses = room.guesses || {};
+            const totalPlayers = playersList.length;
+
+            document.getElementById('res-round-num').textContent = roundIdx + 1;
+            document.getElementById('res-total-rounds').textContent = totalRounds;
+            document.getElementById('res-target-swatch').style.backgroundColor = targetHex;
+            document.getElementById('res-target-hex').textContent = targetHex;
+
+            const ruleNote = document.getElementById('res-scoring-rule-note');
+            ruleNote.textContent = `(${buildScoringRuleSummary(totalPlayers)})`;
+
+            const resultsList = playersList.map(p => {
+                const g = guesses[p.id] || { hex: '#808080' };
+                const sim = typeof g.similarity === 'number' ? g.similarity : calculateSimilarity(targetHex, g.hex);
+                return {
+                    ...p,
+                    guessHex: g.hex,
+                    similarity: sim,
+                    pointsEarned: g.pointsEarned
+                };
+            }).sort((a, b) => b.similarity - a.similarity);
+
+            const topWinner = resultsList[0];
+            if (topWinner) {
+                document.getElementById('res-headline').innerHTML = `¡<span class="underline decoration-hrYellow decoration-4">${escapeHtml(topWinner.name)}</span> logró ${topWinner.similarity.toFixed(1)}% de similitud!`;
+            }
+
+            const container = document.getElementById('res-players-list');
+            container.innerHTML = '';
+
+            resultsList.forEach((item, idx) => {
+                const isFirstPlace = idx === 0;
+                const ptsEarned = typeof item.pointsEarned === 'number'
+                    ? item.pointsEarned
+                    : getPointsForRank(idx, totalPlayers);
+                const ptsText = formatScore(ptsEarned);
+
+                const row = document.createElement('div');
+                row.className = `p-4 rounded-2xl border-2 border-hrInk flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 ${
+                    isFirstPlace
+                        ? 'bg-hrYellow shadow-[0_3px_0_#111111]'
+                        : 'bg-[#FAF9F5]'
+                }`;
+
+                row.innerHTML = `
+                    <!-- Posición y Nombre -->
+                    <div class="flex items-center gap-3.5 min-w-[210px]">
+                        <div class="w-10 h-10 rounded-full ${isFirstPlace ? 'bg-white text-hrInk' : 'bg-neutral-200 text-neutral-700'} border-[1.5px] border-hrInk font-black flex items-center justify-center text-sm flex-shrink-0">
+                            #${idx + 1}
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-extrabold text-base text-hrInk">${escapeHtml(item.name)}</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black ${isFirstPlace ? 'bg-[#28CD41] text-hrInk' : 'bg-white text-hrInk'} border border-hrInk">+${ptsText} ${ptsEarned === 1 ? 'PTO' : 'PTS'}</span>
+                            </div>
+                            <div class="text-xs font-medium text-neutral-700">
+                                Marcador total: <strong class="font-mono font-black">${formatScore(item.score)} pts</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparador Visual Lado a Lado (Objetivo vs Jugador) -->
+                    <div class="flex-grow max-w-md w-full">
+                        <div class="h-12 rounded-xl overflow-hidden flex border-2 border-hrInk relative">
+                            <div class="w-1/2 h-full flex items-center justify-start pl-3 text-[11px] font-mono font-bold" style="background-color: ${targetHex};">
+                                <span class="px-2 py-0.5 rounded bg-white text-hrInk border border-hrInk">REF ${targetHex}</span>
+                            </div>
+                            <div class="w-1/2 h-full flex items-center justify-end pr-3 text-[11px] font-mono font-bold" style="background-color: ${item.guessHex};">
+                                <span class="px-2 py-0.5 rounded bg-white text-hrInk border border-hrInk">${item.guessHex}</span>
+                            </div>
+                            <div class="absolute inset-y-0 left-1/2 w-0.5 bg-hrInk"></div>
+                        </div>
+                    </div>
+
+                    <!-- Porcentaje de Similitud -->
+                    <div class="text-right min-w-[110px]">
+                        <div class="font-mono font-black text-2xl text-hrInk">
+                            ${item.similarity.toFixed(1)}%
+                        </div>
+                        <span class="text-[10px] uppercase tracking-wider text-neutral-600 font-bold">Similitud</span>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            const hostControls = document.getElementById('host-next-round-controls');
+            const guestWait = document.getElementById('guest-next-round-wait');
+            const nextBtnText = document.getElementById('btn-next-round-text');
+            const customHexWrap = document.getElementById('next-round-custom-hex-wrap');
+
+            if (roundIdx + 1 >= totalRounds) {
+                nextBtnText.textContent = 'Ver Podio Final (Fin de Partida)';
+                if (customHexWrap) customHexWrap.classList.add('hidden');
+            } else {
+                nextBtnText.textContent = `Iniciar Ronda ${roundIdx + 2} de ${totalRounds}`;
+                if (customHexWrap) customHexWrap.classList.remove('hidden');
+            }
+
+            if (isHost) {
+                hostControls.classList.remove('hidden');
+                guestWait.classList.add('hidden');
+            } else {
+                hostControls.classList.add('hidden');
+                guestWait.classList.remove('hidden');
+            }
+        }
+
+        window.nextRoundByHost = function () {
+            const room = clientState.roomData;
+            if (!room || !clientState.isHost) return;
+
+            const totalRounds = room.totalRounds || DEFAULT_TOTAL_ROUNDS;
+            const nextRound = (room.currentRound || 0) + 1;
+            if (nextRound >= totalRounds) {
+                room.status = 'game_over';
+                broadcastStateFromHost();
+            } else {
+                const customNextInput = document.getElementById('next-round-custom-hex');
+                if (customNextInput && customNextInput.value.trim()) {
+                    const validCustom = normalizeHex(customNextInput.value.trim());
+                    if (validCustom) {
+                        room.roundTargets[nextRound] = validCustom;
+                    }
+                    customNextInput.value = '';
+                }
+
+                const now = Date.now();
+                room.status = 'memorize';
+                room.currentRound = nextRound;
+                room.guesses = {};
+                room.roundScored = false;
+                room.phaseStartTime = now;
+                room.phaseEndTime = now + MEMORIZE_DURATION_MS;
+                room.localPhaseEndTime = room.phaseEndTime;
+                broadcastStateFromHost();
+            }
+        };
+
+        // ==========================================
+        // VISTA FINAL: PODIO FINAL (SIN DEGRADADOS)
+        // ==========================================
+        function renderGameOverUI(room, playersList, isHost) {
+            const totalRounds = room.totalRounds || DEFAULT_TOTAL_ROUNDS;
+            const completedBadge = document.getElementById('final-completed-badge');
+            if (completedBadge) {
+                completedBadge.textContent = `¡Partida de ${totalRounds} Rondas Completada!`;
+            }
+
+            const sorted = [...playersList].sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return (b.totalAccuracy || 0) - (a.totalAccuracy || 0);
+            });
+
+            const champion = sorted[0];
+            if (champion) {
+                document.getElementById('final-winner-title').innerHTML = `🏆 ¡${escapeHtml(champion.name)} gana con ${formatScore(champion.score)} puntos!`;
+            }
+
+            const list = document.getElementById('final-standings-list');
+            list.innerHTML = '';
+
+            sorted.forEach((p, idx) => {
+                const avgAcc = p.roundsPlayed ? (p.totalAccuracy / p.roundsPlayed).toFixed(1) : '0.0';
+                const medals = ['🥇', '🥈', '🥉'];
+
+                const card = document.createElement('div');
+                card.className = `p-4 sm:p-5 rounded-2xl border-2 border-hrInk flex items-center justify-between gap-4 ${
+                    idx === 0
+                        ? 'bg-hrYellow shadow-[0_4px_0_#111111]'
+                        : 'bg-[#FAF9F5]'
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <span class="text-2xl font-black w-10 text-center">${medals[idx] || `${idx + 1}°`}</span>
+                        <div>
+                            <div class="font-black text-lg text-hrInk">${escapeHtml(p.name)}</div>
+                            <div class="text-xs font-medium text-neutral-700">Precisión promedio en ${totalRounds} rondas: <strong class="font-mono font-bold">${avgAcc}%</strong></div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="font-mono font-black text-2xl sm:text-3xl text-hrInk">${formatScore(p.score)}</span>
+                        <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-600">Puntos</span>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            const rematchBtn = document.getElementById('btn-host-rematch');
+            if (isHost) {
+                rematchBtn.classList.remove('hidden');
+                rematchBtn.classList.add('flex');
+            } else {
+                rematchBtn.classList.add('hidden');
+            }
+        }
+
+        window.returnToLobbyByHost = function () {
+            const room = clientState.roomData;
+            if (!room || !clientState.isHost) return;
+            room.status = 'lobby';
+            room.currentRound = 0;
+            room.guesses = {};
+            room.roundScored = false;
+            broadcastStateFromHost();
+        };
+
+        // ==========================================
+        // FUNCIONES DE COMPARTIR Y PORTAPAPELES
+        // ==========================================
+        window.copyRoomCode = function () {
+            if (!clientState.currentRoomCode) return;
+            copyText(clientState.currentRoomCode, `¡Código ${clientState.currentRoomCode} copiado!`);
+        };
+
+        window.copyInviteLink = function () {
+            if (!clientState.currentRoomCode) return;
+            const link = `${window.location.origin}${window.location.pathname}?room=${clientState.currentRoomCode}`;
+            copyText(link, '¡Link directo de la sala copiado!');
+        };
+
+        window.shareOnWhatsApp = function () {
+            if (!clientState.currentRoomCode) return;
+            const link = `${window.location.origin}${window.location.pathname}?room=${clientState.currentRoomCode}`;
+            const text = `🎨 ¡Entra a mi sala de *ColorMatch*!\n🔑 Código de sala: *${clientState.currentRoomCode}*\n👉 Link directo: ${link}`;
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(waUrl, '_blank', 'noopener,noreferrer');
+        };
+
+        window.copyFinalSummary = function () {
+            const room = clientState.roomData;
+            if (!room) return;
+            const totalRounds = room.totalRounds || DEFAULT_TOTAL_ROUNDS;
+            const players = Object.values(room.players || {}).sort((a, b) => b.score - a.score);
+            const medals = ['🥇', '🥈', '🥉'];
+
+            let text = `🎨 *ColorMatch: Duelo de Memoria (${totalRounds} Rondas)*\n`;
+            text += `🔑 Sala: ${room.code}\n\n`;
+            players.forEach((p, i) => {
+                const avg = p.roundsPlayed ? (p.totalAccuracy / p.roundsPlayed).toFixed(1) : '0.0';
+                text += `${medals[i] || `${i + 1}°`} *${p.name}*: ${formatScore(p.score)} pts (Precisión: ${avg}%)\n`;
+            });
+            copyText(text, '¡Resumen final copiado al portapapeles!');
+        };
+
+        function copyText(text, message) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast(message);
+            } catch (e) {
+                showToast('No se pudo copiar automáticamente', 'warning');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function clearActiveTimer() {
+            if (clientState.activeTimerInterval) {
+                clearInterval(clientState.activeTimerInterval);
+                clientState.activeTimerInterval = null;
+            }
+        }
+
+        let toastTimer = null;
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-msg');
+            const icon = document.getElementById('toast-icon');
+
+            msg.textContent = message;
+            if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-xmark text-[#FF3B30] text-lg';
+            } else if (type === 'warning') {
+                icon.className = 'fa-solid fa-triangle-exclamation text-[#FF9500] text-lg';
+            } else {
+                icon.className = 'fa-solid fa-circle-check text-[#28CD41] text-lg';
+            }
+
+            toast.classList.remove('hidden', 'translate-y-2', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 250);
+            }, 3000);
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // ==========================================
+        // SOPORTE PWA (INSTALAR APP EN CELULAR Y PC)
+        // ==========================================
+        let deferredPwaPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPwaPrompt = e;
+            const btn = document.getElementById('btn-install-pwa');
+            if (btn) {
+                btn.classList.remove('hidden');
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredPwaPrompt = null;
+            const btn = document.getElementById('btn-install-pwa');
+            if (btn) btn.classList.add('hidden');
+            showToast('¡ColorMatch instalado en tu dispositivo!');
+        });
+
+        window.installPWAApp = async function () {
+            if (deferredPwaPrompt) {
+                deferredPwaPrompt.prompt();
+                const { outcome } = await deferredPwaPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    deferredPwaPrompt = null;
+                }
+            } else {
+                const modal = document.getElementById('pwa-install-modal');
+                if (modal) modal.classList.remove('hidden');
+            }
+        };
+
+        window.closeInstallModal = function () {
+            const modal = document.getElementById('pwa-install-modal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
