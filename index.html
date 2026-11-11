@@ -15,10 +15,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ColorMatch">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%23F7E354' stroke='%23111111' stroke-width='12'/><circle cx='54' cy='90' r='20' fill='%23FF3B30' stroke='%23111111' stroke-width='8'/><circle cx='90' cy='90' r='20' fill='%23FF9500' stroke='%23111111' stroke-width='8'/><circle cx='126' cy='90' r='20' fill='%2328CD41' stroke='%23111111' stroke-width='8'/></svg>">
+    <link rel="apple-touch-icon" id="apple-touch-icon-link" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%23F7E354' stroke='%23111111' stroke-width='12'/><circle cx='54' cy='90' r='20' fill='%23FF3B30' stroke='%23111111' stroke-width='8'/><circle cx='90' cy='90' r='20' fill='%23FF9500' stroke='%23111111' stroke-width='8'/><circle cx='126' cy='90' r='20' fill='%2328CD41' stroke='%23111111' stroke-width='8'/></svg>">
 
-    <!-- Web App Manifest embebido en Data URI para mantener todo en 1 solo archivo -->
-    <link rel="manifest" id="pwa-manifest" href='data:application/manifest+json,{"name":"ColorMatch — Duelo de Colores","short_name":"ColorMatch","description":"Juego multijugador de memoria de color y códigos HEX con amigos.","start_url":"./","display":"standalone","background_color":"#2684FF","theme_color":"#2684FF","orientation":"portrait","icons":[{"src":"data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27><rect width=%27512%27 height=%27512%27 rx=%27110%27 fill=%27%23F7E354%27 stroke=%27%23111111%27 stroke-width=%2732%27/><circle cx=%27156%27 cy=%27256%27 r=%2756%27 fill=%27%23FF3B30%27 stroke=%27%23111111%27 stroke-width=%2722%27/><circle cx=%27256%27 cy=%27256%27 r=%2756%27 fill=%27%23FF9500%27 stroke=%27%23111111%27 stroke-width=%2722%27/><circle cx=%27356%27 cy=%27256%27 r=%2756%27 fill=%27%2328CD41%27 stroke=%27%23111111%27 stroke-width=%2722%27/></svg>","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}]}'>
+    <!-- Web App Manifest dinámico (se hidrata con íconos PNG 192/512 y URL absoluta de tu GitHub Pages al cargar) -->
+    <link rel="manifest" id="pwa-manifest">
 
     <!-- Preconnect para acelerar carga de fuentes y mejorar Core Web Vitals (LCP) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2590,6 +2590,82 @@
         // ==========================================
         let deferredPwaPrompt = null;
 
+        // Genera íconos PNG reales en 192x192 y 512x512 exigidos por Chrome Android e iOS
+        function createPwaIconPngDataUrl(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            const scale = size / 512;
+
+            // Fondo amarillo redondeado con borde negro estilo Homeroom
+            ctx.fillStyle = '#F7E354';
+            ctx.strokeStyle = '#111111';
+            ctx.lineWidth = 30 * scale;
+            const r = 110 * scale;
+            const pad = 16 * scale;
+            ctx.beginPath();
+            ctx.roundRect(pad, pad, size - pad * 2, size - pad * 2, r);
+            ctx.fill();
+            ctx.stroke();
+
+            // Tres círculos de ventana clásicos (Rojo, Naranja, Verde)
+            const dots = [
+                { x: 156 * scale, color: '#FF3B30' },
+                { x: 256 * scale, color: '#FF9500' },
+                { x: 356 * scale, color: '#28CD41' }
+            ];
+            dots.forEach(d => {
+                ctx.beginPath();
+                ctx.arc(d.x, 256 * scale, 54 * scale, 0, Math.PI * 2);
+                ctx.fillStyle = d.color;
+                ctx.fill();
+                ctx.lineWidth = 22 * scale;
+                ctx.strokeStyle = '#111111';
+                ctx.stroke();
+            });
+
+            return canvas.toDataURL('image/png');
+        }
+
+        function setupDynamicPwaManifest() {
+            try {
+                const icon192 = createPwaIconPngDataUrl(192);
+                const icon512 = createPwaIconPngDataUrl(512);
+
+                const appleIcon = document.getElementById('apple-touch-icon-link');
+                if (appleIcon) appleIcon.href = icon192;
+
+                const baseUrl = window.location.origin + window.location.pathname;
+                const manifestObj = {
+                    id: baseUrl,
+                    name: 'ColorMatch — Duelo de Colores',
+                    short_name: 'ColorMatch',
+                    description: 'Juego multijugador de memoria de color y códigos HEX con amigos.',
+                    start_url: baseUrl,
+                    scope: baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1),
+                    display: 'standalone',
+                    background_color: '#2684FF',
+                    theme_color: '#2684FF',
+                    orientation: 'portrait',
+                    icons: [
+                        { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+                        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+                    ]
+                };
+
+                const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+                const manifestUrl = URL.createObjectURL(manifestBlob);
+                const manifestLink = document.getElementById('pwa-manifest');
+                if (manifestLink) manifestLink.setAttribute('href', manifestUrl);
+
+                // Registrar Service Worker si existe sw.js en el repositorio de GitHub Pages
+                if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+                    navigator.serviceWorker.register('./sw.js').catch(() => {});
+                }
+            } catch (e) {}
+        }
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPwaPrompt = e;
@@ -2624,7 +2700,10 @@
             if (modal) modal.classList.add('hidden');
         };
 
-        window.addEventListener('DOMContentLoaded', initApp);
+        window.addEventListener('DOMContentLoaded', () => {
+            setupDynamicPwaManifest();
+            initApp();
+        });
     </script>
 </body>
 </html>
