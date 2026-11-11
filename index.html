@@ -650,7 +650,11 @@
                     </div>
 
                     <!-- Mensaje para jugadores no líderes -->
-                    <div id="guest-lobby-wait" class="hidden text-center py-4">
+                    <div id="guest-lobby-wait" class="hidden space-y-3 text-center py-3">
+                        <div class="hr-subcard p-3.5 max-w-md mx-auto flex items-center justify-between text-xs font-bold text-hrInk">
+                            <span><i class="fa-solid fa-flag-checkered mr-1.5"></i>Rondas elegidas por el Líder:</span>
+                            <span id="guest-rounds-pill" class="px-3 py-1 rounded-full bg-hrYellow border border-hrInk font-black">10 Rondas</span>
+                        </div>
                         <div class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#FAF9F5] border-[1.5px] border-hrInk text-hrInk text-sm font-semibold">
                             <i class="fa-solid fa-spinner animate-spin"></i>
                             <span>Esperando a que el Líder (<strong id="lobby-host-name">Host</strong>) inicie las <strong id="guest-lobby-rounds-count">10</strong> rondas...</span>
@@ -772,16 +776,16 @@
                                     <span>Tono / Color (Hue)</span>
                                     <span id="lbl-hue" class="font-mono">0°</span>
                                 </div>
-                                <input type="range" id="slider-h" min="0" max="360" value="0" oninput="window.onHslSliderChange()" class="w-full color-slider hue-steps">
+                                <input type="range" id="slider-h" min="0" max="360" value="180" oninput="window.onHslSliderChange()" class="w-full color-slider hue-steps">
                             </div>
 
                             <!-- Saturación -->
                             <div class="space-y-1">
                                 <div class="flex justify-between text-xs font-bold text-hrInk">
                                     <span>Intensidad (Saturación)</span>
-                                    <span id="lbl-sat" class="font-mono">70%</span>
+                                    <span id="lbl-sat" class="font-mono">50%</span>
                                 </div>
-                                <input type="range" id="slider-s" min="0" max="100" value="70" oninput="window.onHslSliderChange()" class="w-full color-slider">
+                                <input type="range" id="slider-s" min="0" max="100" value="50" oninput="window.onHslSliderChange()" class="w-full color-slider">
                             </div>
 
                             <!-- Luminosidad -->
@@ -846,7 +850,7 @@
                                 Resultados Ronda <span id="res-round-num">1</span> de <span id="res-total-rounds">10</span>
                             </span>
                             <span id="res-scoring-rule-note" class="text-xs font-bold text-neutral-600">
-                                (1° +1 pto · 2° +0.5 pts)
+                                (Puntaje exacto = % de similitud en decimal)
                             </span>
                         </div>
                         <h2 id="res-headline" class="editorial-heading text-3xl sm:text-4xl font-semibold text-hrInk mt-2">Comparación de Similitud</h2>
@@ -992,36 +996,14 @@
         const MEMORIZE_DURATION_MS = 5000; // 5 segundos exactos
         const GUESS_DURATION_MS = 20000;   // 20 segundos exactos
 
-        // Calcula el puntaje escalonado según posición (0-indexed) y total de jugadores:
-        // - 2 jugadores: 1° = 1 pto, 2° = 0.5 pts
-        // - N >= 3 jugadores: 1° = N pts, 2° = N-1 pts, ..., último = 1 pto
-        function getPointsForRank(rankIndex, totalPlayers) {
-            if (totalPlayers <= 1) return 1;
-            if (totalPlayers === 2) {
-                return rankIndex === 0 ? 1 : 0.5;
-            }
-            return Math.max(1, totalPlayers - rankIndex);
-        }
-
+        // Formatea el puntaje con 1 decimal exacto (ej. 85.9% -> 85.9 pts)
         function formatScore(val) {
             const num = Number(val || 0);
-            return Number.isInteger(num) ? String(num) : num.toFixed(1);
+            return num.toFixed(1);
         }
 
-        function buildScoringRuleSummary(totalPlayers) {
-            if (totalPlayers <= 2) {
-                return 'Puntaje (2 jugadores): 1° suma +1 pto · 2° suma +0.5 pts';
-            }
-            const parts = [];
-            const maxPreview = Math.min(totalPlayers, 5);
-            for (let i = 0; i < maxPreview; i++) {
-                const pts = totalPlayers - i;
-                parts.push(`${i + 1}° +${pts}`);
-            }
-            if (totalPlayers > 5) {
-                parts.push(`... ${totalPlayers}° +1`);
-            }
-            return `Puntaje (${totalPlayers} jugadores): ${parts.join(' · ')} pts`;
+        function buildScoringRuleSummary() {
+            return 'Puntaje justo: Tu % de similitud suma directo en decimal (ej: 85.9% = +85.9 pts)';
         }
 
         const sandboxChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('colormatch_sandbox_sync') : null;
@@ -1509,7 +1491,27 @@
                         showToast(`${pName} se unió a la sala`);
                     }
 
+                    // Enviar estado inmediato al jugador recién conectado y a todos los demás
+                    try {
+                        conn.send({
+                            type: 'STATE_SYNC',
+                            roomCode: clientState.currentRoomCode,
+                            serverNow: Date.now(),
+                            roomData: room
+                        });
+                    } catch (e) {}
                     broadcastStateFromHost();
+                }
+
+                if (msg.type === 'REQUEST_SYNC') {
+                    try {
+                        conn.send({
+                            type: 'STATE_SYNC',
+                            roomCode: clientState.currentRoomCode,
+                            serverNow: Date.now(),
+                            roomData: room
+                        });
+                    } catch (e) {}
                 }
 
                 if (msg.type === 'SUBMIT_GUESS') {
@@ -1806,6 +1808,11 @@
                 guestRoundsCount.textContent = selectedRounds;
             }
 
+            const guestRoundsPill = document.getElementById('guest-rounds-pill');
+            if (guestRoundsPill) {
+                guestRoundsPill.textContent = `${selectedRounds} Rondas`;
+            }
+
             // Actualizar estado visual de los botones de rondas (5, 7, 10, 12, 15)
             document.querySelectorAll('.round-opt-btn').forEach(btn => {
                 const rVal = Number(btn.getAttribute('data-rounds'));
@@ -1817,7 +1824,7 @@
             });
 
             const ruleBadge = document.getElementById('lobby-scoring-rule-badge');
-            ruleBadge.textContent = buildScoringRuleSummary(playersList.length);
+            ruleBadge.textContent = buildScoringRuleSummary();
             ruleBadge.className = 'text-xs font-bold px-3.5 py-1 rounded-full bg-hrYellow text-hrInk border border-hrInk';
 
             const grid = document.getElementById('lobby-players-grid');
@@ -1880,6 +1887,16 @@
             if (!room || !clientState.isHost) return;
             const validRounds = ALLOWED_ROUNDS.includes(Number(roundsCount)) ? Number(roundsCount) : DEFAULT_TOTAL_ROUNDS;
             room.totalRounds = validRounds;
+
+            // Ajustar el arreglo de colores objetivo en vivo sin reiniciar a los jugadores conectados
+            const currentTargets = Array.isArray(room.roundTargets) ? room.roundTargets : [];
+            const updatedTargets = [];
+            for (let i = 0; i < validRounds; i++) {
+                updatedTargets.push(currentTargets[i] || generateRandomTargetHex());
+            }
+            room.roundTargets = updatedTargets;
+
+            showToast(`Partida actualizada a ${validRounds} rondas para toda la sala`);
             broadcastStateFromHost();
         };
 
@@ -2010,7 +2027,27 @@
             document.getElementById('guess-total-rounds').textContent = totalRounds;
 
             clientState.hasSubmittedCurrentRound = false;
-            setPlayerPickerColor('#808080');
+
+            // Habilitar todos los deslizadores explícitamente para todos los jugadores (Host e Invitados)
+            ['slider-h', 'slider-s', 'slider-l', 'slider-r', 'slider-g', 'slider-b', 'guess-hex-input', 'guess-native-picker'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.disabled = false;
+            });
+
+            // Iniciar siempre con Intensidad (Saturación) al 50% y Brillo (Luminosidad) al 50%
+            const initialH = 200;
+            const initialS = 50;
+            const initialL = 50;
+            document.getElementById('slider-h').value = initialH;
+            document.getElementById('slider-s').value = initialS;
+            document.getElementById('slider-l').value = initialL;
+            document.getElementById('lbl-hue').textContent = `${initialH}°`;
+            document.getElementById('lbl-sat').textContent = `${initialS}%`;
+            document.getElementById('lbl-light').textContent = `${initialL}%`;
+
+            const startRgb = hslToRgb(initialH, initialS, initialL);
+            const startHex = rgbToHex(startRgb.r, startRgb.g, startRgb.b);
+            setPlayerPickerColor(startHex, true);
 
             const submitBtn = document.getElementById('btn-submit-guess');
             submitBtn.disabled = false;
@@ -2081,7 +2118,7 @@
         }
 
         function setPlayerPickerColor(hex, skipHslSync = false) {
-            const validHex = normalizeHex(hex) || '#808080';
+            const validHex = normalizeHex(hex) || '#4095BF';
             clientState.currentGuessHex = validHex;
 
             document.getElementById('player-current-swatch').style.backgroundColor = validHex;
@@ -2103,11 +2140,18 @@
 
             if (!skipHslSync) {
                 const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-                document.getElementById('slider-h').value = hsl.h;
-                document.getElementById('slider-s').value = hsl.s;
+                const prevH = parseInt(document.getElementById('slider-h').value, 10) || 0;
+                const prevS = parseInt(document.getElementById('slider-s').value, 10) || 50;
+
+                // Preservar Tono y Saturación cuando el Brillo es 0% (negro) o 100% (blanco) para que no se trabe el slider
+                const safeH = (hsl.l === 0 || hsl.l === 100 || hsl.s === 0) ? prevH : hsl.h;
+                const safeS = (hsl.l === 0 || hsl.l === 100) ? prevS : hsl.s;
+
+                document.getElementById('slider-h').value = safeH;
+                document.getElementById('slider-s').value = safeS;
                 document.getElementById('slider-l').value = hsl.l;
-                document.getElementById('lbl-hue').textContent = `${hsl.h}°`;
-                document.getElementById('lbl-sat').textContent = `${hsl.s}%`;
+                document.getElementById('lbl-hue').textContent = `${safeH}°`;
+                document.getElementById('lbl-sat').textContent = `${safeS}%`;
                 document.getElementById('lbl-light').textContent = `${hsl.l}%`;
             }
         }
@@ -2210,7 +2254,7 @@
 
             const ranking = playerIds.map(pid => {
                 const gHex = guessesMap[pid].hex;
-                const similarity = calculateSimilarity(targetHex, gHex);
+                const similarity = Number(calculateSimilarity(targetHex, gHex).toFixed(1));
                 return {
                     playerId: pid,
                     hex: gHex,
@@ -2220,10 +2264,11 @@
 
             ranking.forEach((item, index) => {
                 const p = playersMap[item.playerId];
-                const earnedPoints = getPointsForRank(index, totalPlayers);
+                // El puntaje ganado es exactamente el porcentaje de similitud en número decimal (ej. 85.9% = 85.9 pts)
+                const earnedPoints = Number(item.similarity.toFixed(1));
                 if (p) {
-                    p.score = Number(((p.score || 0) + earnedPoints).toFixed(2));
-                    p.totalAccuracy = Number(((p.totalAccuracy || 0) + item.similarity).toFixed(2));
+                    p.score = Number(((p.score || 0) + earnedPoints).toFixed(1));
+                    p.totalAccuracy = Number(((p.totalAccuracy || 0) + item.similarity).toFixed(1));
                     p.roundsPlayed = (p.roundsPlayed || 0) + 1;
                 }
                 guessesMap[item.playerId].similarity = item.similarity;
@@ -2241,7 +2286,6 @@
             const totalRounds = room.totalRounds || DEFAULT_TOTAL_ROUNDS;
             const targetHex = room.roundTargets[roundIdx] || '#FF5733';
             const guesses = room.guesses || {};
-            const totalPlayers = playersList.length;
 
             document.getElementById('res-round-num').textContent = roundIdx + 1;
             document.getElementById('res-total-rounds').textContent = totalRounds;
@@ -2249,22 +2293,22 @@
             document.getElementById('res-target-hex').textContent = targetHex;
 
             const ruleNote = document.getElementById('res-scoring-rule-note');
-            ruleNote.textContent = `(${buildScoringRuleSummary(totalPlayers)})`;
+            ruleNote.textContent = `(${buildScoringRuleSummary()})`;
 
             const resultsList = playersList.map(p => {
                 const g = guesses[p.id] || { hex: '#808080' };
-                const sim = typeof g.similarity === 'number' ? g.similarity : calculateSimilarity(targetHex, g.hex);
+                const sim = Number((typeof g.similarity === 'number' ? g.similarity : calculateSimilarity(targetHex, g.hex)).toFixed(1));
                 return {
                     ...p,
                     guessHex: g.hex,
                     similarity: sim,
-                    pointsEarned: g.pointsEarned
+                    pointsEarned: typeof g.pointsEarned === 'number' ? g.pointsEarned : sim
                 };
             }).sort((a, b) => b.similarity - a.similarity);
 
             const topWinner = resultsList[0];
             if (topWinner) {
-                document.getElementById('res-headline').innerHTML = `¡<span class="underline decoration-hrYellow decoration-4">${escapeHtml(topWinner.name)}</span> logró ${topWinner.similarity.toFixed(1)}% de similitud!`;
+                document.getElementById('res-headline').innerHTML = `¡<span class="underline decoration-hrYellow decoration-4">${escapeHtml(topWinner.name)}</span> logró ${topWinner.similarity.toFixed(1)}% (+${topWinner.similarity.toFixed(1)} pts)!`;
             }
 
             const container = document.getElementById('res-players-list');
@@ -2272,9 +2316,7 @@
 
             resultsList.forEach((item, idx) => {
                 const isFirstPlace = idx === 0;
-                const ptsEarned = typeof item.pointsEarned === 'number'
-                    ? item.pointsEarned
-                    : getPointsForRank(idx, totalPlayers);
+                const ptsEarned = Number(item.pointsEarned.toFixed(1));
                 const ptsText = formatScore(ptsEarned);
 
                 const row = document.createElement('div');
@@ -2293,10 +2335,10 @@
                         <div>
                             <div class="flex items-center gap-2">
                                 <span class="font-extrabold text-base text-hrInk">${escapeHtml(item.name)}</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black ${isFirstPlace ? 'bg-[#28CD41] text-hrInk' : 'bg-white text-hrInk'} border border-hrInk">+${ptsText} ${ptsEarned === 1 ? 'PTO' : 'PTS'}</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black ${isFirstPlace ? 'bg-[#28CD41] text-hrInk' : 'bg-white text-hrInk'} border border-hrInk">+${ptsText} PTS</span>
                             </div>
                             <div class="text-xs font-medium text-neutral-700">
-                                Marcador total: <strong class="font-mono font-black">${formatScore(item.score)} pts</strong>
+                                Marcador acumulado: <strong class="font-mono font-black">${formatScore(item.score)} pts</strong>
                             </div>
                         </div>
                     </div>
